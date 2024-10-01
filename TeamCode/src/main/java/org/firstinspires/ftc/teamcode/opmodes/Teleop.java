@@ -16,30 +16,30 @@ import org.firstinspires.ftc.teamcode.util.TatOrTotPosition;
 public class Teleop extends CommandOpMode {
     private GamepadEx driver;
     private GamepadEx operator;
-    private MecanumDriveSubsystem mecanumDriveSubsystem;
-    private ImuSubsystem imuSubsystem;
+//    private MecanumDriveSubsystem mecanumDriveSubsystem;
+//  private ImuSubsystem imuSubsystem;
     private TaterTotSubsystem taterTotSubsystem;
 
     @Override
     public void initialize() {
         driver = new GamepadEx(gamepad1);
         operator = new GamepadEx(gamepad2);
-        mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap);
-        imuSubsystem = new ImuSubsystem(hardwareMap, telemetry);
+       // mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap);
+        // imuSubsystem = new ImuSubsystem(hardwareMap, telemetry);
         taterTotSubsystem = new TaterTotSubsystem(hardwareMap);
 
-        Command driveCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
-                ()-> driver.getLeftY(),
-                () -> driver.getLeftX(),
-                () -> driver.getRightX(),
-                () -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),
-                () -> driver.getButton(GamepadKeys.Button.A));
+        // Command driveCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
+        //   ()-> driver.getLeftY(),
+        // () -> driver.getLeftX(),
+        //() -> driver.getRightX(),
+        //() -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),
+        //() -> driver.getButton(GamepadKeys.Button.A));
 
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTTWO));
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTONE));
         operator.getGamepadButton(GamepadKeys.Button.X).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.STARTTOT));
-        mecanumDriveSubsystem.setDefaultCommand(driveCommand);
+        //  mecanumDriveSubsystem.setDefaultCommand(driveCommand);
 
-        register(imuSubsystem);
+        //  register(imuSubsystem);
     }
 }

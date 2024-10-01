@@ -28,6 +28,7 @@ public class TaterTotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        super.periodic();
+        //  this.tatertot.setTargetPosition(setpoint);
+        this.tatertot.set(0.1);
     }
 }
