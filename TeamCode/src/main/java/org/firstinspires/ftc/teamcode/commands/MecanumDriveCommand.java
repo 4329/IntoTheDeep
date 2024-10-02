@@ -2,50 +2,65 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 
-import java.util.function.Supplier;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 public class MecanumDriveCommand extends CommandBase {
-   private static double REGULAR_MOTION_DIVISOR = 3.0;
-   private static double SLOW_MOTION_DIVISOR = 6.0;
-   private MecanumDriveSubsystem mecanumDriveSubsystem;
-   private Supplier<Double> forwardDrive;
-   private Supplier<Double> strafeDrive;
-   private Supplier<Double> turnDrive;
-   private Supplier<Boolean> speedBoost;
-   private Supplier<Boolean> slowMode;
+    private MecanumDriveSubsystem mecanumDriveSubsystem;
+    private DoubleSupplier forwardDrive;
+    private DoubleSupplier rotateDrive;
+    private DoubleSupplier strafeDrive;
+    private BooleanSupplier speedBooost;
+    private BooleanSupplier slowBoost;
+    private Telemetry telemetry;
+    private static double REGULAR_MOTION_DIVISOR = 3.0;
+    private static double SLOW_MOTION_DIVISOR = 6.0;
 
-    public MecanumDriveCommand(MecanumDriveSubsystem mecanumDriveSubsystem, Supplier<Double> forwardDrive, Supplier<Double> strafeDrive, Supplier<Double> turnDrive, Supplier<Boolean> speedBoost, Supplier<Boolean> slowMode) {
+    public MecanumDriveCommand(MecanumDriveSubsystem mecanumDriveSubsystem,
+                               DoubleSupplier forwardDrive,
+                               DoubleSupplier rotateDrive,
+                               DoubleSupplier strafeDrive,
+                               BooleanSupplier speeedBooost,
+                               BooleanSupplier slowBoost,
+                               Telemetry telemetry) {
         this.mecanumDriveSubsystem = mecanumDriveSubsystem;
         this.forwardDrive = forwardDrive;
+        this.rotateDrive = rotateDrive;
         this.strafeDrive = strafeDrive;
-        this.turnDrive = turnDrive;
-        this.speedBoost = speedBoost;
-        this.slowMode = slowMode;
+        this.speedBooost = speeedBooost;
+        this.slowBoost = slowBoost;
+        this.telemetry = telemetry;
+        addRequirements(mecanumDriveSubsystem);
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     @Override
     public void execute() {
-        if (speedBoost.get()) {
+        telemetry.addData("speedBooost", speedBooost.getAsBoolean());
+        if (speedBooost.getAsBoolean()) {
             mecanumDriveSubsystem.drive(
-                    forwardDrive.get(),
-                    turnDrive.get(),
-                    strafeDrive.get());
-        }
-        else if(slowMode.get()) {
+                    forwardDrive.getAsDouble(),
+                    rotateDrive.getAsDouble(),
+                    strafeDrive.getAsDouble());
+        } else if (slowBoost.getAsBoolean()) {
             mecanumDriveSubsystem.drive(
-             forwardDrive.get() / SLOW_MOTION_DIVISOR,
-                turnDrive.get() / SLOW_MOTION_DIVISOR,
-               strafeDrive.get() / SLOW_MOTION_DIVISOR
-             );
-        }
-        else {
+                    forwardDrive.getAsDouble() / SLOW_MOTION_DIVISOR,
+                    rotateDrive.getAsDouble() / SLOW_MOTION_DIVISOR,
+                    strafeDrive.getAsDouble() / SLOW_MOTION_DIVISOR);
+
+        } else {
+
             mecanumDriveSubsystem.drive(
-                    forwardDrive.get() / REGULAR_MOTION_DIVISOR,
-                    turnDrive.get() / REGULAR_MOTION_DIVISOR,
-                    strafeDrive.get() / REGULAR_MOTION_DIVISOR
-            );
+                    forwardDrive.getAsDouble() / REGULAR_MOTION_DIVISOR,
+                    rotateDrive.getAsDouble() / REGULAR_MOTION_DIVISOR,
+                    strafeDrive.getAsDouble() / REGULAR_MOTION_DIVISOR);
         }
     }
 }
