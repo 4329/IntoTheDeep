@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.util.RobotConfig.CLAW_SPEED;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,7 +13,7 @@ public class ClawSubsystem extends SubsystemBase {
     private Telemetry telemetry;
     private Servo servo;
     private boolean closed = true;
-
+    private double position = 0;
 
     public ClawSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -24,47 +26,44 @@ public class ClawSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        telemetry.addLine("servo position is:" + servo.getPosition());
+        servo.setPosition(position);
+        telemetry.addLine("claw is: " + position);
     }
 
     public void open() {
-        servo.setPosition(0);
+        position = 0;
         closed = false;
 
         telemetry.addLine("claw open");
 
     }
     public void close() {
-        servo.setPosition(0.40);
+        position = 0.40;
         closed = true;
 
         telemetry.addLine("claw closed");
 
     }
 
-    public void onePixel() {
-        servo.setPosition(0.30);
-
-        telemetry.addLine("");
-
-        closed = false;
-
-    }
-
-    public void toggleClaw() {
-        if (closed == true) {
-            open();
-
-            telemetry.addLine("clawOpen");
+    public void closer() {
+        if (position <0.40){
+            position += CLAW_SPEED;
         }
         else {
-            close();
-
-            telemetry.addLine("clawClosed");
+            position = 0.40;
+            closed = true;
         }
     }
 
-
+    public void opener() {
+        if (position > 0){
+            position -= CLAW_SPEED;
+        }
+        else {
+            position = 0;
+            closed = false;
+        }
+    }
 
 
 }
