@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         telemetry.addLine("Elevator setPoint:" + setPoint);
-        telemetry.addLine("Eleveator is at:" + elevatorMotor.getCurrentPosition());
+        telemetry.addLine("Elevator is at:" + elevatorMotor.getCurrentPosition());
 
     }
 

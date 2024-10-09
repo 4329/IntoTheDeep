@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.qualcomm.hardware.dfrobot.HuskyLensSubsystem;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.commands.AutoCommandFactory;
 import org.firstinspires.ftc.teamcode.commands.CommandGroups;
 import org.firstinspires.ftc.teamcode.commands.ElevatorResetCommand;
 import org.firstinspires.ftc.teamcode.commands.EncoderDriveCommand;
@@ -24,7 +25,7 @@ import org.firstinspires.ftc.teamcode.subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.util.Alliance;
 import org.firstinspires.ftc.teamcode.util.SpikeMarkLocation;
 
-@Autonomous(name = "BlueAutoFrontStage", group = "1")
+@Autonomous(name = "BlueHighBasket", group = "1")
 public class BlueFrontAuto extends CommandOpMode {
     private MecanumDriveSubsystem mecanumDriveSubsystem;
     private TelemetryUpdateSubsystem telemetryUpdateSubsystem;
@@ -52,14 +53,9 @@ public class BlueFrontAuto extends CommandOpMode {
         clawSubsystem = new ClawSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
         webcamSubsystem = new WebcamSubsystem(hardwareMap, telemetry);
-        Command closeclaw = new UnInstantCommand(()-> clawSubsystem.close());
-        Command see = new HuskylensDetectCommand(huskyLensSubsystem,  telemetry, Alliance.BLUE);
-        Command elevatorReset = new ElevatorResetCommand(elevatorSubsystem, telemetry);
-        Command imuReset = new InitializeNavxCommand(imuSubsystem, telemetry);
-        Command scoreTheSpike = CommandGroups.driveToDesiredFrontSpikeMark(Alliance.BLUE, mecanumDriveSubsystem, clawSubsystem, elevatorSubsystem, telemetry, imuSubsystem);
-        Command april = CommandGroups.aprilTagScore(Alliance.BLUE, mecanumDriveSubsystem, webcamSubsystem, elevatorSubsystem, armSubsystem, clawSubsystem, telemetry);
+        AutoCommandFactory factory = new AutoCommandFactory(mecanumDriveSubsystem, null, imuSubsystem, elevatorSubsystem, clawSubsystem, armSubsystem, telemetry);
 
-        schedule(new SequentialCommandGroup(imuReset.withTimeout(5000), elevatorReset, new WaitCommand(250), closeclaw, see.withTimeout(1500), scoreTheSpike, april));
+        schedule(factory.scoreHighBasket());
     }
 
 }

@@ -18,7 +18,6 @@ public class EncoderDriveCommand extends CommandBase {
     private double strafe;
     private double inches;
     public static final double TICKS_PER_REV = 28;
-    public static final double MAX_RPM = 6000;
     public static double WHEEL_RADIUS = 1.8898; // in
     public static double GEAR_RATIO = .0529100529; // output (wheel) speed / input (motor) speed
     private Motor.Encoder encoder;
