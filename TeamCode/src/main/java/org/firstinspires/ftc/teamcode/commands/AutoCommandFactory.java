@@ -36,15 +36,23 @@ public class AutoCommandFactory {
     }
 
     public Command scoreHighBasket(){
-        EncoderDriveCommand strafe = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, .21, 10);
-        EncoderDriveCommand forward = new EncoderDriveCommand(mecanumDriveSubsystem, -0.35, 0, 0, 19);
+
+        ElevatorPosCommand elevatorStart = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry);
+
+        EncoderDriveCommand strafe = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, .21, 15);
+        EncoderDriveCommand forward = new EncoderDriveCommand(mecanumDriveSubsystem, -0.35, 0, 0, 27);
         TurnToHeadingCommand turn = new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45);
         ArmPositionCommand armUp = new ArmPositionCommand(armSubsystem, ArmPosition.OUT);
         ElevatorPosCommand elevatorHighBasket = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry);
-        EncoderDriveCommand miniForward = new EncoderDriveCommand(mecanumDriveSubsystem, -0.35, 0, 0, 3);
-        Command fullOpenClaw = new UnInstantCommand(()->clawSubsystem.open());
+        EncoderDriveCommand miniForward = new EncoderDriveCommand(mecanumDriveSubsystem, -0.35, 0, 0, 7);
+        Command fullOpenClaw = new UnInstantCommand(()->clawSubsystem.close());
+        EncoderDriveCommand miniBack = new EncoderDriveCommand(mecanumDriveSubsystem, 0.35, 0, 0,7);
+        ElevatorPosCommand elevatorDown = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry);
+        ArmPositionCommand armDown = new ArmPositionCommand(armSubsystem, ArmPosition.IN);
+        TurnToHeadingCommand turnTwo = new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90);
+        EncoderDriveCommand strafeTwo = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, -.21, 5);
 
-        return new SequentialCommandGroup(strafe, forward, turn, armUp, elevatorHighBasket, miniForward, fullOpenClaw);
+        return new SequentialCommandGroup(elevatorStart, strafe, forward, turn, armUp.withTimeout(1000), elevatorHighBasket.withTimeout(3000), miniForward.withTimeout(1000), fullOpenClaw, miniBack, elevatorDown, armDown, turnTwo, strafeTwo);
 
 
     }
