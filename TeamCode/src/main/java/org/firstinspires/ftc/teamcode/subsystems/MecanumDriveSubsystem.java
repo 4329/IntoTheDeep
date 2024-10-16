@@ -7,6 +7,8 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class MecanumDriveSubsystem extends SubsystemBase {
 
     private MecanumDrive mecanumDrive;
@@ -15,14 +17,23 @@ public class MecanumDriveSubsystem extends SubsystemBase {
     private Motor leftBackDrive;
     private Motor rightBackDrive;
     private PIDController turnPID;
+    private Telemetry telemetry;
 
-    public MecanumDriveSubsystem(HardwareMap hardwareMap) {
+    public MecanumDriveSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.leftFrontDrive = new Motor(hardwareMap, "LeftFrontDrive");
         this.rightFrontDrive = new Motor(hardwareMap, "RightFrontDrive");
         this.leftBackDrive = new Motor(hardwareMap, "LeftBackDrive");
         this.rightBackDrive = new Motor(hardwareMap, "RightBackDrive");
+        this.telemetry = telemetry;
+
+
+        leftFrontDrive.motor.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.motor.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.motor.setDirection(DcMotor.Direction.REVERSE);
+        rightBackDrive.motor.setDirection(DcMotor.Direction.FORWARD);
 
         leftFrontDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         rightFrontDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -30,6 +41,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         mecanumDrive = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         turnPID = new PIDController(1,0,0);
         turnPID.setTolerance(15);
+
     }
 
     public void stop() {
@@ -38,6 +50,6 @@ public class MecanumDriveSubsystem extends SubsystemBase {
 
     public void drive(double forward, double turn, double strafe){
         // what should we call here?
-     //   mecanumDrive.something()????
+        mecanumDrive.driveRobotCentric(strafe, forward, turn);
     }
 }
