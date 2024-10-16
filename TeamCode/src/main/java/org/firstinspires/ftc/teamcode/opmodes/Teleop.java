@@ -26,7 +26,8 @@ public class Teleop extends CommandOpMode {
         operator = new GamepadEx(gamepad2);
        // mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap);
         // imuSubsystem = new ImuSubsystem(hardwareMap, telemetry);
-        taterTotSubsystem = new TaterTotSubsystem(hardwareMap);
+        taterTotSubsystem = new TaterTotSubsystem(hardwareMap, telemetry);
+
 
         // Command driveCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
         //   ()-> driver.getLeftY(),
@@ -38,6 +39,8 @@ public class Teleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTTWO));
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTONE));
         operator.getGamepadButton(GamepadKeys.Button.X).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.STARTTOT));
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN) .whileHeld(()->taterTotSubsystem.down());
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_UP) .whileHeld(()->taterTotSubsystem.up());
         //  mecanumDriveSubsystem.setDefaultCommand(driveCommand);
 
         //  register(imuSubsystem);
