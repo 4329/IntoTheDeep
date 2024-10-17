@@ -63,7 +63,7 @@ public class AutoCommandFactory {
         ElevatorPosCommand elevatorStartTwo = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry);
         EncoderDriveCommand forwardTwo = new EncoderDriveCommand(mecanumDriveSubsystem, -0.35, 0, 0, 8);
         Command fullCloseClawTwo = new UnInstantCommand(()->clawSubsystem.open());
-        EncoderDriveCommand strafeTwo = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, .21, -5);
+        EncoderDriveCommand strafeThree = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, .21, -5);
         TurnToHeadingCommand turnThree = new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 135);
         ArmPositionCommand armUpTwo = new ArmPositionCommand(armSubsystem, ArmPosition.OUT);
         ElevatorPosCommand elevatorHighBasketTwo = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry);
@@ -73,8 +73,8 @@ public class AutoCommandFactory {
         ElevatorPosCommand elevatorDownTwo = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry);
         ArmPositionCommand armDownTwo = new ArmPositionCommand(armSubsystem, ArmPosition.IN);
         TurnToHeadingCommand turnFour = new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0);
-        EncoderDriveCommand strafeThree = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, -.21, 8);
+        EncoderDriveCommand strafeFour = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, -.21, 8);
 
-        return new SequentialCommandGroup(elevatorStartTwo, forwardTwo, fullCloseClawTwo, strafeTwo, turnThree, armUpTwo, elevatorHighBasketTwo, miniForwardTwo, fullOpenClawTwo, miniBackTwo, elevatorDownTwo, armDownTwo, turnFour, strafeThree);
+        return new SequentialCommandGroup(elevatorStartTwo, forwardTwo, fullCloseClawTwo, strafeThree, turnThree, armUpTwo, elevatorHighBasketTwo, miniForwardTwo, fullOpenClawTwo, miniBackTwo, elevatorDownTwo, armDownTwo, turnFour, strafeFour);
     }
 }
