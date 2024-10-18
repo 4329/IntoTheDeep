@@ -1,7 +1,10 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -10,10 +13,11 @@ import org.firstinspires.ftc.teamcode.util.TatOrTotPosition;
 public class TaterTotSubsystem extends SubsystemBase {
     private int setpoint;
     private Motor tatertot;
-    private final Telemetry telemetry;
+    private Telemetry telemetry;
 
     public TaterTotSubsystem(HardwareMap tatertoot, Telemetry telemetry) {
         this.tatertot = new Motor(tatertoot, "linear");
+        //this.tatertot.setInverted(true);
         this.telemetry = telemetry;
         this.tatertot.setRunMode(Motor.RunMode.PositionControl);
         this.tatertot.setPositionCoefficient(.17);
@@ -21,6 +25,7 @@ public class TaterTotSubsystem extends SubsystemBase {
         this.tatertot.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         this.tatertot.resetEncoder();
         this.setpoint=0;
+        this.tatertot.motor.setDirection(DcMotorSimple.Direction.REVERSE);
     }
     public void totTater(TatOrTotPosition totOrTate){
         this.setpoint=totOrTate.getValue();
@@ -32,7 +37,15 @@ public class TaterTotSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        this.telemetry.addLine("tatertot is at" + setpoint);
+        if (telemetry != null){
+
+            this.telemetry.addLine("tatertot is at: " + setpoint);
+telemetry.update();
+        }
+        else{
+            Log.i("bleh", "tatertot is at: " + setpoint);
+        }
+
         //  this.tatertot.setTargetPosition(setpoint);
         this.tatertot.set(0.1);
     }
@@ -40,12 +53,16 @@ public class TaterTotSubsystem extends SubsystemBase {
     public void down() {
         if (setpoint > 0){
             setpoint = setpoint - 1;
+            this.tatertot.setTargetPosition(setpoint);
+
         }
     }
 
     public void up() {
-        if (setpoint < 5){
+        if (setpoint < 2000){
             setpoint = setpoint + 1;
+            this.tatertot.setTargetPosition(setpoint);
+
         }
 
     }

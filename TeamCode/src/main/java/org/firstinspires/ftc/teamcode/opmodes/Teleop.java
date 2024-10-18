@@ -39,10 +39,10 @@ public class Teleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTTWO));
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTONE));
         operator.getGamepadButton(GamepadKeys.Button.X).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.STARTTOT));
-        operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN) .whileHeld(()->taterTotSubsystem.down());
-        operator.getGamepadButton(GamepadKeys.Button.DPAD_UP) .whileHeld(()->taterTotSubsystem.up());
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN) .whileHeld(() ->taterTotSubsystem.down());
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_UP) .whileHeld(() ->taterTotSubsystem.up());
         //  mecanumDriveSubsystem.setDefaultCommand(driveCommand);
-
+register (taterTotSubsystem);
         //  register(imuSubsystem);
     }
 }
