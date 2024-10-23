@@ -14,6 +14,7 @@ public class TaterTotSubsystem extends SubsystemBase {
     private int setpoint;
     private Motor tatertot;
     private Telemetry telemetry;
+    private int rateOfChange = 5; //no greater than 5, 4 may be desired
 
     public TaterTotSubsystem(HardwareMap tatertoot, Telemetry telemetry) {
         this.tatertot = new Motor(tatertoot, "linear");
@@ -39,7 +40,8 @@ public class TaterTotSubsystem extends SubsystemBase {
     public void periodic() {
         if (telemetry != null){
 
-            this.telemetry.addLine("tatertot is at: " + setpoint);
+            this.telemetry.addLine("tatertot setpoint: " + setpoint);
+            this.telemetry.addLine("tatertot actual position: " + tatertot.getCurrentPosition());
 telemetry.update();
         }
         else{
@@ -52,15 +54,15 @@ telemetry.update();
 
     public void down() {
         if (setpoint > 0){
-            setpoint = setpoint - 1;
+            setpoint = setpoint - rateOfChange;
             this.tatertot.setTargetPosition(setpoint);
 
         }
     }
 
     public void up() {
-        if (setpoint < 2000){
-            setpoint = setpoint + 1;
+        if (setpoint < TatOrTotPosition.MAXIMUM.getValue()){
+            setpoint = setpoint + rateOfChange;
             this.tatertot.setTargetPosition(setpoint);
 
         }
