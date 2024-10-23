@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.controller.PIDController;
 import com.arcrobotics.ftclib.drivebase.MecanumDrive;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -30,7 +31,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         leftFrontDrive.motor.setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.motor.setDirection(DcMotor.Direction.FORWARD);
         leftBackDrive.motor.setDirection(DcMotor.Direction.REVERSE);
-        rightBackDrive.motor.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.motor.setDirection(DcMotor.Direction.REVERSE);
 
         leftFrontDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
