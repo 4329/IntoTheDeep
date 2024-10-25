@@ -83,6 +83,14 @@ public class AutoCommandFactory {
         new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180)
         );
     }
+
+    public Command touchLowBar (){
+        return new SequentialCommandGroup (
+        new ArmPositionCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
+        lMove(20,180),
+        forward(8,180)
+        );
+    }
     private Command backUp (double inches, double heading){
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0.35, 0, 0,inches);
     }
