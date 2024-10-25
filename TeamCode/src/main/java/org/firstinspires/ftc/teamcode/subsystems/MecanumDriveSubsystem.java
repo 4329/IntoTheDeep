@@ -7,9 +7,12 @@ import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class MecanumDriveSubsystem extends SubsystemBase {
 
     private MecanumDrive mecanumDrive;
+    private Telemetry telemetry;
     private Motor leftFrontDrive;
     private Motor rightFrontDrive;
     private Motor leftBackDrive;
@@ -28,7 +31,7 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         rightBackDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         mecanumDrive = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
-        turnPID = new PIDController(1,0,0);
+        turnPID = new PIDController(1, 0, 0);
         turnPID.setTolerance(15);
     }
 
@@ -36,8 +39,8 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         mecanumDrive.stop();
     }
 
-    public void drive(double forward, double turn, double strafe){
+    public void drive(double forward, double turn, double strafe) {
         // what should we call here?
-     //   mecanumDrive.something()????
+        mecanumDrive.driveRobotCentric(strafe, turn, forward);
     }
 }
