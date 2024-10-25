@@ -31,14 +31,14 @@ public class ClawSubsystem extends SubsystemBase {
     }
 
     public void open() {
-        position = 0;
+        position = 0.40;
         closed = false;
 
         telemetry.addLine("claw open");
 
     }
     public void close() {
-        position = 0.40;
+        position = 0;
         closed = true;
 
         telemetry.addLine("claw closed");

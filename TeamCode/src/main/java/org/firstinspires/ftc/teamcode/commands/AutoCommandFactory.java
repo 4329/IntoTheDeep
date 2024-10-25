@@ -41,6 +41,7 @@ public class AutoCommandFactory {
     public Command scoreHighBasketTaterTwo () {
         return new SequentialCommandGroup(
          new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+                new UnInstantCommand(()->clawSubsystem.close()),
          rMove(15,0),
          forward(27, 0),
          new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
@@ -48,35 +49,39 @@ public class AutoCommandFactory {
                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
          ).withTimeout(3000 ),
          forward(7, 45),
-         new UnInstantCommand(()->clawSubsystem.close()),
+         new UnInstantCommand(()->clawSubsystem.open()),
          backUp(7, 45),
+                new ParallelCommandGroup(
          new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
-         new ArmPositionCommand(armSubsystem, ArmPosition.IN),
+         new ArmPositionCommand(armSubsystem, ArmPosition.IN)
+                ).withTimeout(2500),
          new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
-         lMove(3, -90)
-
-
+         lMove(4, -90)
         );
     }
 
-    public Command scoreRightSample(){
 
-        ElevatorPosCommand elevatorStartTwo = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry);
-        EncoderDriveCommand forwardTwo = new EncoderDriveCommand(mecanumDriveSubsystem, -0.35, 0, 0, 10);
-        Command fullCloseClawTwo = new UnInstantCommand(()->clawSubsystem.open());
-        Command BackFromSample = backUp(10, -90);
-        TurnToHeadingCommand turnThree = new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45);
-        ArmPositionCommand armUpTwo = new ArmPositionCommand(armSubsystem, ArmPosition.OUT);
-        ElevatorPosCommand elevatorHighBasketTwo = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry);
-        EncoderDriveCommand miniForwardTwo = new EncoderDriveCommand(mecanumDriveSubsystem, -0.35, 0, 0, 7);
-        Command fullOpenClawTwo = new UnInstantCommand(()->clawSubsystem.close());
-        EncoderDriveCommand miniBackTwo = new EncoderDriveCommand(mecanumDriveSubsystem, 0.35, 0, 0,7);
-        ElevatorPosCommand elevatorDownTwo = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry);
-        ArmPositionCommand armDownTwo = new ArmPositionCommand(armSubsystem, ArmPosition.IN);
-        TurnToHeadingCommand turnFour = new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0);
-        EncoderDriveCommand strafeFour = new EncoderDriveCommand(mecanumDriveSubsystem, 0.0, 0.0, -.21, 8);
-
-        return new SequentialCommandGroup(elevatorStartTwo, forwardTwo, fullCloseClawTwo, new WaitCommand(300), BackFromSample, turnThree, armUpTwo.withTimeout(200), elevatorHighBasketTwo.withTimeout(3000), miniForwardTwo, fullOpenClawTwo, miniBackTwo, elevatorDownTwo, armDownTwo, turnFour, strafeFour);
+    public Command scoreRightSample (){
+        return new SequentialCommandGroup (
+        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+        forward (10, -90),
+        new UnInstantCommand(()->clawSubsystem.close()),
+        new WaitCommand (500),
+        backUp(10, -90),
+        new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
+        new ParallelCommandGroup(
+        new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
+        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
+                ).withTimeout(3000),
+        forward(7, 45),
+        new UnInstantCommand(()->clawSubsystem.open()),
+        backUp (7, 45),
+        new ParallelCommandGroup(
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+                new ArmPositionCommand(armSubsystem, ArmPosition.IN)
+        ).withTimeout(2500),
+        new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180)
+        );
     }
     private Command backUp (double inches, double heading){
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0.35, 0, 0,inches);
