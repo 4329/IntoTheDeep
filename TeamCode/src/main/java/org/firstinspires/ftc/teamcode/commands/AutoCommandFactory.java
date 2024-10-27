@@ -19,18 +19,15 @@ import org.firstinspires.ftc.teamcode.util.ArmPosition;
 import org.firstinspires.ftc.teamcode.util.ElevatorPosition;
 
 public class AutoCommandFactory {
-    private MecanumDriveSubsystem mecanumDriveSubsystem;
-    private TelemetryUpdateSubsystem telemetryUpdateSubsystem;
-    private ImuSubsystem imuSubsystem;
-    private ElevatorSubsystem elevatorSubsystem;
-    private ClawSubsystem clawSubsystem;
-    private ArmSubsystem armSubsystem;
-    private Telemetry telemetry;
+    private final MecanumDriveSubsystem mecanumDriveSubsystem;
+    private final ImuSubsystem imuSubsystem;
+    private final ElevatorSubsystem elevatorSubsystem;
+    private final ClawSubsystem clawSubsystem;
+    private final ArmSubsystem armSubsystem;
+    private final Telemetry telemetry;
 
-
-    public AutoCommandFactory(MecanumDriveSubsystem mecanumDriveSubsystem, TelemetryUpdateSubsystem telemetryUpdateSubsystem, ImuSubsystem imuSubsystem, ElevatorSubsystem elevatorSubsystem, ClawSubsystem clawSubsystem, ArmSubsystem armSubsystem, Telemetry telemetry) {
+    public AutoCommandFactory(MecanumDriveSubsystem mecanumDriveSubsystem, ImuSubsystem imuSubsystem, ElevatorSubsystem elevatorSubsystem, ClawSubsystem clawSubsystem, ArmSubsystem armSubsystem, Telemetry telemetry) {
         this.mecanumDriveSubsystem = mecanumDriveSubsystem;
-        this.telemetryUpdateSubsystem = telemetryUpdateSubsystem;
         this.imuSubsystem = imuSubsystem;
         this.elevatorSubsystem = elevatorSubsystem;
         this.clawSubsystem = clawSubsystem;
@@ -38,68 +35,73 @@ public class AutoCommandFactory {
         this.telemetry = telemetry;
 
     }
+
     public Command scoreHighBasketTaterTwo () {
         return new SequentialCommandGroup(
-         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
-                new UnInstantCommand(()->clawSubsystem.close()),
-         rMove(15,0),
-         forward(27, 0),
-         new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
-         new ParallelCommandGroup(new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
+             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+             new UnInstantCommand(()->clawSubsystem.close()),
+             rMove(15,0),
+             forward(27, 0),
+             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
+             new ParallelCommandGroup(
+                 new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
-         ).withTimeout(3000 ),
-         forward(7, 45),
-         new UnInstantCommand(()->clawSubsystem.open()),
-         backUp(7, 45),
-                new ParallelCommandGroup(
-         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
-         new ArmPositionCommand(armSubsystem, ArmPosition.IN)
-                ).withTimeout(2500),
-         new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
-         lMove(4, -90)
+             ).withTimeout(3000 ),
+             forward(7, 45),
+             new UnInstantCommand(()->clawSubsystem.open()),
+             backUp(7, 45),
+             new ParallelCommandGroup(
+                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+                 new ArmPositionCommand(armSubsystem, ArmPosition.IN)
+             ).withTimeout(2500),
+             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
+             lMove(4, -90)
         );
     }
 
 
     public Command scoreRightSample (){
         return new SequentialCommandGroup (
-        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
-        forward (10, -90),
-        new UnInstantCommand(()->clawSubsystem.close()),
-        new WaitCommand (500),
-        backUp(10, -90),
-        new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
-        new ParallelCommandGroup(
-        new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
-        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
-                ).withTimeout(3000),
-        forward(7, 45),
-        new UnInstantCommand(()->clawSubsystem.open()),
-        backUp (7, 45),
-        new ParallelCommandGroup(
+            new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+            forward (10, -90),
+            new UnInstantCommand(()->clawSubsystem.close()),
+            new WaitCommand (500),
+            backUp(10, -90),
+            new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
+            new ParallelCommandGroup(
+                new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
+            ).withTimeout(3000),
+            forward(7, 45),
+            new UnInstantCommand(()->clawSubsystem.open()),
+            backUp (7, 45),
+            new ParallelCommandGroup(
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
                 new ArmPositionCommand(armSubsystem, ArmPosition.IN)
-        ).withTimeout(2500),
-        new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180)
+            ).withTimeout(2500),
+            new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180)
         );
     }
 
-    public Command touchLowBar (){
+    public Command touchLowBar() {
         return new SequentialCommandGroup (
-        new ArmPositionCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
-        lMove(20,180),
-        forward(8,180)
+            new ArmPositionCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
+            lMove(20,180),
+            forward(8,180)
         );
     }
+
     private Command backUp (double inches, double heading){
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0.35, 0, 0,inches);
     }
     private Command forward (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.35, 0, 0, inches);
     }
+
     private Command lMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.21, inches);
     }
+
     private Command rMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .21, inches);
     }

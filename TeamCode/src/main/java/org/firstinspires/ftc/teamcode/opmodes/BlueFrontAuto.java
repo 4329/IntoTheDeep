@@ -53,7 +53,7 @@ public class BlueFrontAuto extends CommandOpMode {
         clawSubsystem = new ClawSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
         webcamSubsystem = new WebcamSubsystem(hardwareMap, telemetry);
-        AutoCommandFactory factory = new AutoCommandFactory(mecanumDriveSubsystem, null, imuSubsystem, elevatorSubsystem, clawSubsystem, armSubsystem, telemetry);
+        AutoCommandFactory factory = new AutoCommandFactory(mecanumDriveSubsystem, imuSubsystem, elevatorSubsystem, clawSubsystem, armSubsystem, telemetry);
         SequentialCommandGroup yes = new SequentialCommandGroup(new InitializeNavxCommand(imuSubsystem, telemetry),factory.scoreHighBasketTaterTwo(),factory.scoreRightSample());
         schedule(yes);
     }
