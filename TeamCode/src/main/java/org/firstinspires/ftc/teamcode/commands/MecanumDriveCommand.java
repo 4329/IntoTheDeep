@@ -23,6 +23,7 @@ public class MecanumDriveCommand extends CommandBase {
         this.turnDrive = turnDrive;
         this.speedBoost = speedBoost;
         this.slowMode = slowMode;
+        addRequirements(mecanumDriveSubsystem);
     }
 
     @Override

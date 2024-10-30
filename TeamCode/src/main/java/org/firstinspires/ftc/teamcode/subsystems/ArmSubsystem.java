@@ -51,6 +51,16 @@ public class ArmSubsystem extends SubsystemBase {
         return armMotor.atTargetPosition();
     }
 
+    public void armUp() {
+        armMotor.set(0.2);
+    }
+
+    public void armDown() {
+        armMotor.set(-0.2);
+    }
+    public void armStop() {
+        armMotor.set(0);
+    }
     public void stop() {
         this.armMotor.stopMotor();
     }
