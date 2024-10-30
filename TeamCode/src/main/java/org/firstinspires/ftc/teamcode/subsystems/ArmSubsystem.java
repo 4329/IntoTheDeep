@@ -11,6 +11,7 @@ public class ArmSubsystem extends SubsystemBase {
     private Motor armMotor;
     private Telemetry telemetry;
     private int setPoint;
+    private final int manuelRateOfChangeForArmRotateThing = 20;
 
     public ArmSubsystem(HardwareMap hm, Telemetry jerry) {
         this.armMotor = new Motor(hm, "armMotor");
@@ -40,6 +41,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        this.armMotor.setTargetPosition(setPoint);
         this.armMotor.set(0.1);
         telemetry.addLine("Arm actual position: " + armMotor.getCurrentPosition());
         telemetry.addLine("Arm setPoint: " + setPoint);
@@ -52,11 +54,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void armUp() {
-        armMotor.set(0.2);
+        setPoint += manuelRateOfChangeForArmRotateThing;
     }
 
     public void armDown() {
-        armMotor.set(-0.2);
+        setPoint -= manuelRateOfChangeForArmRotateThing;
     }
     public void armStop() {
         armMotor.set(0);

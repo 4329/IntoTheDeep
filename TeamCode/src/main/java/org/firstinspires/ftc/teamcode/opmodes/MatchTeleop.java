@@ -6,8 +6,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.commands.ArmDownCommand;
-import org.firstinspires.ftc.teamcode.commands.ArmUpCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorResetCommand;
 import org.firstinspires.ftc.teamcode.commands.ElevatorVerticalCommand;
 import org.firstinspires.ftc.teamcode.commands.MecanumDpadCommand;
@@ -18,7 +16,6 @@ import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 //import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TelemetryUpdateSubsystem;
-import org.firstinspires.ftc.teamcode.util.ArmPosition;
 
 @TeleOp(name = "Match Teleop", group = "1")
 public class MatchTeleop extends CommandOpMode {
@@ -66,8 +63,8 @@ public class MatchTeleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.X).whenPressed(()-> clawSubsystem.toggleClaw());
 //        operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.OUT));
 //        operator.getGamepadButton(GamepadKeys.Button.A).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.IN));
-        operator.getGamepadButton(GamepadKeys.Button.Y).whileHeld(()-> new ArmUpCommand(armSubsystem));
-        operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(()-> new ArmDownCommand(armSubsystem));
+        operator.getGamepadButton(GamepadKeys.Button.Y).whileHeld(()-> armSubsystem.armUp());
+        operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(()-> armSubsystem.armDown());
         operator.getGamepadButton(GamepadKeys.Button.B).whenPressed(()-> clawSubsystem.onePixel());
 
         operator.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(()-> elevatorSubsystem.levelUp());
