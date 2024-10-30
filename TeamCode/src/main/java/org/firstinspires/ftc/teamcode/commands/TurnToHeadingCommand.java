@@ -31,7 +31,7 @@ public class TurnToHeadingCommand extends CommandBase {
     @Override
     public void initialize() {
         frcPid.setSetpoint(DesiredAngle);
-        frcPid.setTolerance(0.2);
+        frcPid.setTolerance(0.4);
         frcPid.enableContinuousInput(-180, 180);
         Log.i("turnCommand", "turnstarting");
 
@@ -43,7 +43,7 @@ public class TurnToHeadingCommand extends CommandBase {
         telemetry.addLine("is going");
         double heading = imu.getHeading();
         double output = frcPid.calculate(heading);
-        output = Range.clip(output,-.5,.5);
+        output = Range.clip(output,-.7,.7);
         drive.drive(0, -output, 0);
         Log.i("turnCommand", "desired angle, heading, output " + "(" + DesiredAngle + ", " + heading + ", " + output + ")");
     }

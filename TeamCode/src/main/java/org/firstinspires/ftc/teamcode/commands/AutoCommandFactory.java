@@ -41,7 +41,7 @@ public class AutoCommandFactory {
              new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
              new UnInstantCommand(()->clawSubsystem.close()),
              rMove(15,0),
-             forward(27, 0),
+             forward(11, 0),
              new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
              new ParallelCommandGroup(
                  new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
@@ -55,7 +55,7 @@ public class AutoCommandFactory {
                  new ArmPositionCommand(armSubsystem, ArmPosition.IN)
              ).withTimeout(2500),
              new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
-             lMove(4, -90)
+             lMove(2, -90)
         );
     }
 
@@ -72,7 +72,7 @@ public class AutoCommandFactory {
                 new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
             ).withTimeout(3000),
-            forward(7, 45),
+            forward(7, 50),
             new UnInstantCommand(()->clawSubsystem.open()),
             backUp (7, 45),
             new ParallelCommandGroup(
@@ -84,10 +84,12 @@ public class AutoCommandFactory {
     }
 
     public Command touchLowBar() {
-        return new SequentialCommandGroup (
-            new ArmPositionCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
-            lMove(20,180),
-            forward(8,180)
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                    new ArmPositionCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
+                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.5, 0,-1, 47)
+                ),
+                forward(2,180)
         );
     }
 
@@ -99,7 +101,7 @@ public class AutoCommandFactory {
     }
 
     private Command lMove (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.21, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.3, inches);
     }
 
     private Command rMove (double inches, double heading) {
