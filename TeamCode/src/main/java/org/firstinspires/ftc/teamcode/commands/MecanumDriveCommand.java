@@ -30,22 +30,22 @@ public class MecanumDriveCommand extends CommandBase {
     public void execute() {
         if (speedBoost.get()) {
             mecanumDriveSubsystem.drive(
+                    strafeDrive.get(),
                     forwardDrive.get(),
-                    turnDrive.get(),
-                    strafeDrive.get());
+                    turnDrive.get());
         }
         else if(slowMode.get()) {
             mecanumDriveSubsystem.drive(
-             forwardDrive.get() / SLOW_MOTION_DIVISOR,
-                turnDrive.get() / SLOW_MOTION_DIVISOR,
-               strafeDrive.get() / SLOW_MOTION_DIVISOR
+             strafeDrive.get() / SLOW_MOTION_DIVISOR,
+                forwardDrive.get() / SLOW_MOTION_DIVISOR,
+               turnDrive.get() / SLOW_MOTION_DIVISOR
              );
         }
         else {
             mecanumDriveSubsystem.drive(
+                    strafeDrive.get() / REGULAR_MOTION_DIVISOR,
                     forwardDrive.get() / REGULAR_MOTION_DIVISOR,
-                    turnDrive.get() / REGULAR_MOTION_DIVISOR,
-                    strafeDrive.get() / REGULAR_MOTION_DIVISOR
+                    turnDrive.get() / REGULAR_MOTION_DIVISOR
             );
         }
     }

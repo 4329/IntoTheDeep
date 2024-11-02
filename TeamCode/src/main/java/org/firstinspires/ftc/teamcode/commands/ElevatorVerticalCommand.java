@@ -1,6 +1,8 @@
 
 package org.firstinspires.ftc.teamcode.commands;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -13,8 +15,8 @@ public class ElevatorVerticalCommand extends CommandBase {
     private ElevatorSubsystem es;
     private  Telemetry telemetry;
     private DoubleSupplier elevatorPower;
-    public ElevatorVerticalCommand(ElevatorSubsystem elevatorSubsystem, DoubleSupplier elevatorPower, Telemetry telemetry) {
 
+    public ElevatorVerticalCommand(ElevatorSubsystem elevatorSubsystem, DoubleSupplier elevatorPower, Telemetry telemetry) {
         this.elevatorPower = elevatorPower;
         this.elevatorSubsystem = elevatorSubsystem;
         this.telemetry = telemetry;
@@ -23,16 +25,12 @@ public class ElevatorVerticalCommand extends CommandBase {
 
     @Override
     public void execute() {
+        Log.i("ELEVATOR(default)", "move by: " + elevatorPower.getAsDouble());
         elevatorSubsystem.move(elevatorPower.getAsDouble());
     }
 
-
-
-
     @Override
     public void end(boolean interrupted) {
-
         elevatorSubsystem.stop();
-
     }
 }

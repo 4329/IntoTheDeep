@@ -44,9 +44,9 @@ public class MatchTeleop extends CommandOpMode {
         clawSubsystem = new ClawSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
         driveMecanumCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
-                () -> -driver.getLeftY(),
-                () -> driver.getRightX(),
+                () -> driver.getLeftY(),
                 () -> driver.getLeftX(),
+                () -> driver.getRightX(),
                 () -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),
                 () -> driver.getButton(GamepadKeys.Button.A)
                 );;
@@ -71,14 +71,13 @@ public class MatchTeleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(()-> elevatorSubsystem.levelUp());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(()-> elevatorSubsystem.levelDown());
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(totalZeroCommandGroup);
-        operator.getGamepadButton(GamepadKeys.Button.B).whenPressed(()-> clawSubsystem.onePixel());
+        operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() -> armSubsystem.resetPidController());
 
 
         mecanumDriveSubsystem.setDefaultCommand(driveMecanumCommand);
         elevatorSubsystem.setDefaultCommand(elevatorVerticalCommand);
-
 //        register(imuSubsystem, telemetryUpdateSubsystem);
 
-        schedule(new ElevatorResetCommand(elevatorSubsystem, telemetry));
+       //TODO uncomment when elevatorButton attached schedule(new ElevatorResetCommand(elevatorSubsystem, telemetry));
     }
 }
