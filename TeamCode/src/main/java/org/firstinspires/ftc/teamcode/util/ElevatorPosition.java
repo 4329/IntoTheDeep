@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 public enum ElevatorPosition {
 
     DOWN(0),
-    INTAKE(105), STARTTHING(300),
+    INTAKE(105), STARTTHING(300), DRIVETIME(1100),
     UPTHING(2180), UPPERBASKET(5500);
     private int position;
 

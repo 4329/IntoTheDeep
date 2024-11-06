@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.commands.FireZeMisslizCommand;
 import org.firstinspires.ftc.teamcode.commands.InitializeNavxCommand;
 import org.firstinspires.ftc.teamcode.commands.MecanumDpadCommand;
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.UnInstantCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DroneSubsystem;
@@ -71,11 +72,7 @@ public class MatchTeleop extends CommandOpMode {
         driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),1, 0, telemetry));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),-1, 0, telemetry));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),0, -1, telemetry));
-        ElevatorVerticalCommand elevatorVerticalCommand = new ElevatorVerticalCommand(elevatorSubsystem,
-                () -> operator.getLeftY(),
-
-
-        telemetry);
+        ElevatorVerticalCommand elevatorVerticalCommand = new ElevatorVerticalCommand(elevatorSubsystem, () -> operator.getLeftY(), telemetry);
         operator.getGamepadButton(GamepadKeys.Button.X).whenHeld(new ClawCloserCommand(clawSubsystem));
         operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.OUT));
         operator.getGamepadButton(GamepadKeys.Button.A).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.IN));
@@ -84,6 +81,8 @@ public class MatchTeleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(()-> elevatorSubsystem.levelUp());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(()-> elevatorSubsystem.levelDown());
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(totalZeroCommandGroup);
+        operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(CommandGroups.elevatorInit(elevatorSubsystem, armSubsystem, telemetry));
+        operator.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(CommandGroups.elevatorDrive(elevatorSubsystem, armSubsystem, telemetry));
 
         mecanumDriveSubsystem.setDefaultCommand(driveMecanumCommand);
         elevatorSubsystem.setDefaultCommand(elevatorVerticalCommand);
@@ -91,6 +90,9 @@ public class MatchTeleop extends CommandOpMode {
 
         register(imuSubsystem, telemetryUpdateSubsystem);
 
-        schedule(new InitializeNavxCommand(imuSubsystem, telemetry), new ElevatorResetCommand(elevatorSubsystem, telemetry));
+        schedule(new InitializeNavxCommand(imuSubsystem, telemetry),
+        new UnInstantCommand(()->armSubsystem.resetEncoder())
+        //        , new ElevatorResetCommand(elevatorSubsystem, telemetry)
+        );
     }
 }

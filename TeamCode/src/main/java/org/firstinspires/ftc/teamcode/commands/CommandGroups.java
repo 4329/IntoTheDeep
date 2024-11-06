@@ -25,6 +25,28 @@ import org.firstinspires.ftc.teamcode.util.SpikeMarkLocation;
 import java.util.HashMap;
 
 public class CommandGroups {
+    public static Command elevatorInit(ElevatorSubsystem elevatorSubsystem, ArmSubsystem armSubsystem, Telemetry telemetry) {
+
+        return new ParallelCommandGroup(
+                new ArmPositionCommand(armSubsystem, ArmPosition.SUBMERSIBLE).withTimeout(400),
+                new SequentialCommandGroup(
+                        new WaitCommand(100),
+                        new ElevatorResetCommand(elevatorSubsystem, telemetry)
+                )
+
+        );
+    }
+    public static Command elevatorDrive(ElevatorSubsystem elevatorSubsystem, ArmSubsystem armSubsystem, Telemetry telemetry) {
+
+        return new ParallelCommandGroup(
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.DRIVETIME, telemetry),
+                new SequentialCommandGroup(
+                        new WaitCommand(300),
+                        new ArmPositionCommand(armSubsystem, ArmPosition.IN).withTimeout(200)
+                )
+
+        );
+    }
     public static Command totalZero(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, Telemetry telemetry) {
 
         return new ParallelCommandGroup(

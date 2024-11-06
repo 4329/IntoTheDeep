@@ -17,25 +17,20 @@ public class ArmSubsystem extends SubsystemBase {
         this.armMotor.setInverted(false);
         this.telemetry = jerry;
         this.armMotor.setRunMode(Motor.RunMode.PositionControl);
-        this.armMotor.setPositionCoefficient(0.15);
+        this.armMotor.setPositionCoefficient(0.45);
         this.armMotor.setPositionTolerance(0.5);
         this.armMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         this.setPoint = 0;
         this.armMotor.encoder.reset();
-
     }
 
     public void goToPosition(ArmPosition timmy) {
         this.setPoint = timmy.getPosition();
-
         this.armMotor.setTargetPosition(this.setPoint);
+    }
 
-
-
-
-
-
-
+    public void resetEncoder() {
+        this.armMotor.encoder.reset();
     }
 
     @Override
@@ -44,6 +39,7 @@ public class ArmSubsystem extends SubsystemBase {
         telemetry.addLine("Arm actual position: " + armMotor.getCurrentPosition());
         telemetry.addLine("Arm setPoint: " + setPoint);
         telemetry.addLine("armError: " + Math.abs(setPoint - armMotor.getCurrentPosition()));
+        telemetry.addLine("armEncoder:" + armMotor.encoder.getPosition());
     }
 
     public boolean armAtPosition() {
