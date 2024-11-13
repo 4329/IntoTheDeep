@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
+import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.hardware.dfrobot.HuskyLensSubsystem;
 
 import org.firstinspires.ftc.robotcore.external.Predicate;
@@ -65,7 +66,7 @@ public class AutoCommandFactory {
             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
             forward (10, -90),
             new UnInstantCommand(()->clawSubsystem.close()),
-            new WaitCommand (500),
+            new WaitCommand (1000),
             backUp(10, -90),
             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
             new ParallelCommandGroup(
@@ -91,6 +92,23 @@ public class AutoCommandFactory {
                 ),
                 forward(2,180)
         );
+    }
+
+    public Command approachPiece1(){
+        return new SequentialCommandGroup(
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.OTHERSTARTTHING, telemetry),
+                forward(1, 0),
+                rMove(25, 0),
+                forward(21, 0),
+                new UnInstantCommand(()->clawSubsystem.close()),
+                new WaitUntilCommand(clawSubsystem::atSetpoint),
+                backUp(5,0),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180),
+                forward(10,180),
+                new UnInstantCommand(()->clawSubsystem.open()),
+                new WaitUntilCommand(clawSubsystem::atSetpoint)
+
+                );
     }
 
     private Command backUp (double inches, double heading){

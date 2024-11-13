@@ -5,7 +5,11 @@ import static org.firstinspires.ftc.teamcode.util.RobotConfig.CLAW_SPEED;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoControllerEx;
+import com.qualcomm.robotcore.hardware.ServoImpl;
 
+import org.firstinspires.ftc.ftccommon.internal.manualcontrol.commands.ServoCommands;
+import org.firstinspires.ftc.ftccommon.internal.manualcontrol.parameters.ServoChannelParameters;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class ClawSubsystem extends SubsystemBase {
@@ -19,8 +23,6 @@ public class ClawSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
         this.servo = hardwareMap.get(Servo.class, "clawServo");
         open();
-
-
     }
 
 
@@ -45,8 +47,16 @@ public class ClawSubsystem extends SubsystemBase {
 
     }
 
+    public boolean atSetpoint() {
+        double range = 0.03;
+        double curPosition = servo.getController().getServoPosition(servo.getPortNumber());
+        telemetry.addLine("CLAR CLAR CLAR: " + curPosition + ", " + position);
+        telemetry.update();
+        return false;//curPosition < position + range && curPosition > position - range;
+    }
+
     public void closer() {
-        if (position <0.40){
+        if (position < 0.40) {
             position += CLAW_SPEED;
         }
         else {
