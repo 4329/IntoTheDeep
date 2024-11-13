@@ -52,7 +52,7 @@ public class ClawSubsystem extends SubsystemBase {
         double curPosition = servo.getController().getServoPosition(servo.getPortNumber());
         telemetry.addLine("CLAR CLAR CLAR: " + curPosition + ", " + position);
         telemetry.update();
-        return false;//curPosition < position + range && curPosition > position - range;
+        return true;//curPosition < position + range && curPosition > position - range;
     }
 
     public void closer() {
