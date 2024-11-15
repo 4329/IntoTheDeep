@@ -48,6 +48,27 @@ public class ArmSubsystem extends SubsystemBase {
         return armMotor.atTargetPosition();
     }
 
+
+
+    public void move(double stickValue) {
+
+//        setPoint += (stickValue * 5.0);
+
+        int newSetPoint = (int) (setPoint + (-stickValue * 3.0));
+
+        if (newSetPoint < 0) {
+
+            newSetPoint = 0;
+
+        } else if (newSetPoint > 138) {
+            newSetPoint = 138;
+        }
+
+    setPoint = newSetPoint;
+        this.armMotor.setTargetPosition(setPoint);
+
+
+    }
     public void stop() {
         this.armMotor.stopMotor();
     }

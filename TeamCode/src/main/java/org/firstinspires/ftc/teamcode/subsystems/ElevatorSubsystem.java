@@ -60,6 +60,10 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.elevatorMotor.stopMotor();
     }
 
+    public void setZero() {
+        setPoint =0;
+    }
+
     public void move(double stickValue) {
 
 //        setPoint += (stickValue * 5.0);

@@ -7,6 +7,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.hardware.dfrobot.HuskyLensSubsystem;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.commands.ArmVerticalCommand;
 import org.firstinspires.ftc.teamcode.commands.ClawCloserCommand;
 import org.firstinspires.ftc.teamcode.commands.ClawOpenerCommand;
 import org.firstinspires.ftc.teamcode.commands.CommandGroups;
@@ -73,6 +74,7 @@ public class MatchTeleop extends CommandOpMode {
         driver.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),-1, 0, telemetry));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),0, -1, telemetry));
         ElevatorVerticalCommand elevatorVerticalCommand = new ElevatorVerticalCommand(elevatorSubsystem, () -> operator.getLeftY(), telemetry);
+        ArmVerticalCommand armVerticalCommand = new ArmVerticalCommand(armSubsystem, () -> operator.getRightY(), telemetry);
         operator.getGamepadButton(GamepadKeys.Button.X).whenHeld(new ClawCloserCommand(clawSubsystem));
         operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.OUT));
         operator.getGamepadButton(GamepadKeys.Button.A).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.IN));
@@ -86,13 +88,14 @@ public class MatchTeleop extends CommandOpMode {
 
         mecanumDriveSubsystem.setDefaultCommand(driveMecanumCommand);
         elevatorSubsystem.setDefaultCommand(elevatorVerticalCommand);
+        armSubsystem.setDefaultCommand(armVerticalCommand);
         droneSubsystem.setDefaultCommand(firedemisillestoaliens);
 
         register(imuSubsystem, telemetryUpdateSubsystem);
 
         schedule(new InitializeNavxCommand(imuSubsystem, telemetry),
         new UnInstantCommand(()->armSubsystem.resetEncoder())
-        //        , new ElevatorResetCommand(elevatorSubsystem, telemetry)
+//                , new ElevatorResetCommand(elevatorSubsystem, telemetry)
         );
     }
 }
