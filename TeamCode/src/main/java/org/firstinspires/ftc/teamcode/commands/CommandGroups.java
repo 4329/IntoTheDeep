@@ -28,7 +28,7 @@ public class CommandGroups {
     public static Command elevatorInit(ElevatorSubsystem elevatorSubsystem, ArmSubsystem armSubsystem, Telemetry telemetry) {
 
         return new ParallelCommandGroup(
-                new ArmPositionCommand(armSubsystem, ArmPosition.SUBMERSIBLE).withTimeout(400),
+//                new ArmPositionCommand(armSubsystem, ArmPosition.SUBMERSIBLE).withTimeout(400),
                 new SequentialCommandGroup(
                         new WaitCommand(100),
                         new ElevatorResetCommand(elevatorSubsystem, telemetry)
