@@ -64,7 +64,7 @@ public class AutoCommandFactory {
     public Command scoreRightSample (){
         return new SequentialCommandGroup (
             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
-            forward (10, -90),
+            forward (9, -90),
             new UnInstantCommand(()->clawSubsystem.close()),
             new WaitCommand (1000),
             backUp(10, -90),
@@ -90,7 +90,8 @@ public class AutoCommandFactory {
                     new ArmPositionCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
                     new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.5, 0,-1, 47)
                 ),
-                forward(2,180)
+                forward(2,180),
+                new ArmPositionCommand(armSubsystem,ArmPosition.BARAUTO).withTimeout(250)
         );
     }
 
