@@ -50,8 +50,8 @@ public class CommandGroups {
     public static Command totalZero(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, Telemetry telemetry) {
 
         return new ParallelCommandGroup(
-//                new ElevatorResetCommand(elevatorSubsystem, telemetry),
-                new ArmPositionCommand(armSubsystem, ArmPosition.IN));
+                new ElevatorResetCommand(elevatorSubsystem, telemetry),
+                new ArmPositionCommand(armSubsystem, ArmPosition.FORTOTALZERO));
 
     }
 

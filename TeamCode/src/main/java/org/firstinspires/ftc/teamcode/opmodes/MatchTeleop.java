@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.commands.FireZeMisslizCommand;
 import org.firstinspires.ftc.teamcode.commands.InitializeNavxCommand;
 import org.firstinspires.ftc.teamcode.commands.MecanumDpadCommand;
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveCommand;
+import org.firstinspires.ftc.teamcode.commands.RaiseToHighBasket;
 import org.firstinspires.ftc.teamcode.commands.SubmersibleCommand;
 import org.firstinspires.ftc.teamcode.commands.UnInstantCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
@@ -59,9 +60,9 @@ public class MatchTeleop extends CommandOpMode {
         droneSubsystem = new DroneSubsystem(hardwareMap, telemetry);
         huskyLensSubsystem = new HuskyLensSubsystem(hardwareMap, telemetry);
         webcamSubsystem = new WebcamSubsystem(hardwareMap, telemetry);
-        FireZeMisslizCommand firedemisillestoaliens = new FireZeMisslizCommand(droneSubsystem,
-                () -> driver.getButton(GamepadKeys.Button.RIGHT_BUMPER),
-                () -> operator.getButton(GamepadKeys.Button.RIGHT_BUMPER));
+//        FireZeMisslizCommand firedemisillestoaliens = new FireZeMisslizCommand(droneSubsystem,
+//                () -> driver.getButton(GamepadKeys.Button.RIGHT_BUMPER),
+//                () -> operator.getButton(GamepadKeys.Button.RIGHT_BUMPER));
         MecanumDriveCommand driveMecanumCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
                 () -> -driver.getLeftY(),
                 () -> driver.getRightX(),
@@ -70,6 +71,7 @@ public class MatchTeleop extends CommandOpMode {
                 () -> driver.getButton(GamepadKeys.Button.A),
                 telemetry);
 
+        driver.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(totalZeroCommandGroup);
         driver.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),0, 1, telemetry));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),1, 0, telemetry));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),-1, 0, telemetry));
@@ -83,13 +85,13 @@ public class MatchTeleop extends CommandOpMode {
 
         operator.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(()-> elevatorSubsystem.levelUp());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(()-> elevatorSubsystem.levelDown());
-        operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(totalZeroCommandGroup);
+        operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(new RaiseToHighBasket(armSubsystem, elevatorSubsystem, clawSubsystem, telemetry));
         operator.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(CommandGroups.elevatorDrive(elevatorSubsystem, armSubsystem, telemetry));
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new SubmersibleCommand(armSubsystem, elevatorSubsystem, clawSubsystem, telemetry));
         mecanumDriveSubsystem.setDefaultCommand(driveMecanumCommand);
         elevatorSubsystem.setDefaultCommand(elevatorVerticalCommand);
         armSubsystem.setDefaultCommand(armVerticalCommand);
-        droneSubsystem.setDefaultCommand(firedemisillestoaliens);
+//        droneSubsystem.setDefaultCommand(firedemisillestoaliens);
 
         register(imuSubsystem, telemetryUpdateSubsystem);
 
@@ -99,3 +101,4 @@ public class MatchTeleop extends CommandOpMode {
         );
     }
 }
+//
