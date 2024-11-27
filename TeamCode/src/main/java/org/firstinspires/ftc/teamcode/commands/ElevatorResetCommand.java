@@ -76,6 +76,7 @@ public class ElevatorResetCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         Log.i("elevatorReset", "ENDENDEND");
+        elevatorSubsystem.elevatorAtZero();
         elevatorSubsystem.switchPosition();
 
     }

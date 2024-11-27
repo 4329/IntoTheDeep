@@ -36,7 +36,13 @@ public class ArmSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-        this.armMotor.set(0.1);
+        if (this.setPoint == 0) {
+            this.armMotor.set(0.00001);
+        }
+        else {
+            this.armMotor.set(0.1);
+        }
+
         telemetry.addLine("Arm actual position: " + armMotor.getCurrentPosition());
         telemetry.addLine("Arm setPoint: " + setPoint);
         telemetry.addLine("armError: " + Math.abs(setPoint - armMotor.getCurrentPosition()));
