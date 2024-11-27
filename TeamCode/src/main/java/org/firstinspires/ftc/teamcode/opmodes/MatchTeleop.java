@@ -56,7 +56,7 @@ public class MatchTeleop extends CommandOpMode {
         elevatorSubsystem = new ElevatorSubsystem(hardwareMap, telemetry);
         clawSubsystem = new ClawSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
-        totalZeroCommandGroup = CommandGroups.totalZero(armSubsystem, elevatorSubsystem, telemetry);
+        totalZeroCommandGroup = CommandGroups.totalZero(armSubsystem, elevatorSubsystem, clawSubsystem, telemetry);
         droneSubsystem = new DroneSubsystem(hardwareMap, telemetry);
         huskyLensSubsystem = new HuskyLensSubsystem(hardwareMap, telemetry);
         webcamSubsystem = new WebcamSubsystem(hardwareMap, telemetry);

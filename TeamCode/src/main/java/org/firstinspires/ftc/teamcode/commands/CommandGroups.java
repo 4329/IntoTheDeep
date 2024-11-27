@@ -47,11 +47,12 @@ public class CommandGroups {
 
         );
     }
-    public static Command totalZero(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, Telemetry telemetry) {
+    public static Command totalZero(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, ClawSubsystem clawSubsystem, Telemetry telemetry) {
 
         return new ParallelCommandGroup(
                 new ElevatorResetCommand(elevatorSubsystem, telemetry),
-                new ArmPositionCommand(armSubsystem, ArmPosition.FORTOTALZERO));
+                new ArmPositionCommand(armSubsystem, ArmPosition.FORTOTALZERO),
+                new UnInstantCommand(()-> clawSubsystem.open()));
 
 
     }

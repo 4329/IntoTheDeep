@@ -131,7 +131,7 @@ public void elevatorAtZero(){
         this.elevatorMotor.setInverted(true);
         this.elevatorMotor.setRunMode(Motor.RunMode.PositionControl);
         this.elevatorMotor.setPositionCoefficient(1);
-        this.elevatorMotor.setFeedforwardCoefficients(0.2,0.35);
+        this.elevatorMotor.setFeedforwardCoefficients(0,0.35);
         this.elevatorMotor.setPositionTolerance(5);
         this.elevatorMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         this.setPoint = 0;
