@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands;
 
+import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,7 +13,7 @@ public class ArmPositionCommand extends CommandBase {
     private final ArmPosition armPosition;
     private final ArmSubsystem armSubsystem;
 
-    public ArmPositionCommand(ArmSubsystem armSubsystem, ArmPosition armPosition) {
+    private ArmPositionCommand(ArmSubsystem armSubsystem, ArmPosition armPosition) {
 
 
     this.armPosition = armPosition;
@@ -20,7 +21,10 @@ public class ArmPositionCommand extends CommandBase {
     addRequirements(armSubsystem);
 
     }
+    public static Command createCommand(ArmSubsystem armSubsystem, ArmPosition armPosition){
+        return new ArmPositionCommand(armSubsystem, armPosition).withTimeout(750);
 
+    }
 
     @Override
     public void initialize() {
