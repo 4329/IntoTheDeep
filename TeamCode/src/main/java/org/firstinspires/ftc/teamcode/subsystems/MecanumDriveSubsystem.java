@@ -26,6 +26,10 @@ public class MecanumDriveSubsystem extends SubsystemBase {
         rightFrontDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFrontDrive.setInverted(true);
+        rightFrontDrive.setInverted(false);
+        leftBackDrive.setInverted(true);
+        rightBackDrive.setInverted(true);
 
         mecanumDrive = new MecanumDrive(leftFrontDrive, rightFrontDrive, leftBackDrive, rightBackDrive);
         turnPID = new PIDController(1,0,0);

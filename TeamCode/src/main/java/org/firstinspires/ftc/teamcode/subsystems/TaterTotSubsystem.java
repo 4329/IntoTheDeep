@@ -14,7 +14,7 @@ public class TaterTotSubsystem extends SubsystemBase {
     private int setpoint;
     private Motor tatertot;
     private Telemetry telemetry;
-    private int rateOfChange = 5; //no greater than 5, 4 may be desired
+    private int rateOfChange = 30; //no greater than 5, 4 may be desired
 
     public TaterTotSubsystem(HardwareMap tatertoot, Telemetry telemetry) {
         this.tatertot = new Motor(tatertoot, "linear");
