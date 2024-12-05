@@ -11,4 +11,5 @@ public class RobotConfig {
     public static double ARM_I_MIN = -15;
     public static double ARM_I_MAX = 15;
 
+    public static double CLAW_SPEED = .02;
 }

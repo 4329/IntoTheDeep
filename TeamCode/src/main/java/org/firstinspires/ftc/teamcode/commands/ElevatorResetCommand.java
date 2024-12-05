@@ -26,6 +26,7 @@ public class ElevatorResetCommand extends CommandBase {
     public void initialize() {
 
         Log.i("elevatorReset", "INITIALIZE1234567890");
+        elevatorSubsystem.setZero();
         elevatorSubsystem.switchPower();
         downed = false;
         done = false;
@@ -72,8 +73,8 @@ public class ElevatorResetCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         Log.i("elevatorReset", "ENDENDEND");
+        elevatorSubsystem.elevatorAtZero();
         elevatorSubsystem.switchPosition();
-
     }
 
     @Override

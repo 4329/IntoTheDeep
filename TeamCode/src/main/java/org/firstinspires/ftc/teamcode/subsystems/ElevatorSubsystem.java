@@ -15,6 +15,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private Telemetry telemetry;
     private TouchSensor elevatorSensor;
     private boolean positionControl = true;
+    private boolean zeroed= false;
+    private int zeroOffset = 1200;
 
     private static final double DISTANCEPERPULSE = 0.009335691828994;
 
@@ -26,8 +28,12 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     public void goToPosition(ElevatorPosition sammy) {
-        this.setPoint = sammy.getPosition();
+        this.setPoint = sammy.getPosition() + (zeroed ? zeroOffset : 0);
         this.elevatorMotor.setTargetPosition(this.setPoint);
+    }
+
+    public void elevatorAtZero(){
+        zeroed = true;
     }
 
     @Override
@@ -41,11 +47,15 @@ public class ElevatorSubsystem extends SubsystemBase {
         }
 
         telemetry.addLine("Elevator setPoint:" + setPoint);
-        telemetry.addLine("Eleveator is at:" + elevatorMotor.getCurrentPosition());
+        telemetry.addLine("Elevator is at:" + elevatorMotor.getCurrentPosition());
     }
 
     public void stop() {
         this.elevatorMotor.stopMotor();
+    }
+
+    public void setZero() {
+        setPoint =0;
     }
 
     public void move(double stickValue) {
@@ -96,7 +106,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.elevatorMotor.setRunMode(Motor.RunMode.PositionControl);
         this.elevatorMotor.setPositionCoefficient(1);
         this.elevatorMotor.setFeedforwardCoefficients(0,0.35);
-        this.elevatorMotor.setPositionTolerance(0.5);
+        this.elevatorMotor.setPositionTolerance(5);
         this.elevatorMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         this.setPoint = 0;
         this.elevatorMotor.encoder.reset();
