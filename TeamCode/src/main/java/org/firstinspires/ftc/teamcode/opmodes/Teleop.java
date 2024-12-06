@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TaterTotSubsystem;
 import org.firstinspires.ftc.teamcode.util.TatOrTotPosition;
@@ -46,6 +47,8 @@ public class Teleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.DPAD_UP) .whileHeld(() ->taterTotSubsystem.up());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_LEFT) .whileHeld(() -> armSubsystem.up());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT) .whileHeld(() -> armSubsystem.down());
+        operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(() -> new IntakeSubsystem(hardwareMap, telemetry).intake());
+        operator.getGamepadButton(GamepadKeys.Button.B).whileHeld(() -> new IntakeSubsystem(hardwareMap, telemetry).opener());
           mecanumDriveSubsystem.setDefaultCommand(driveCommand);
 register (taterTotSubsystem);
         //  register(imuSubsystem);
