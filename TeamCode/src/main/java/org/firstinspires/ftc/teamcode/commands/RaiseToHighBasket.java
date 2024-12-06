@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.util.ElevatorPosition;
 public class RaiseToHighBasket extends ParallelCommandGroup
 {
     public RaiseToHighBasket (ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, ClawSubsystem clawSubsystem, Telemetry telemetry){
-        super(new ArmPositionCommand(armSubsystem, ArmPosition.OUT),
+        super(ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
                 );
     }

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.util.ElevatorPosition;
 
 public class PickUpSample extends ParallelCommandGroup {
     public PickUpSample(ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, ClawSubsystem clawSubsystem, Telemetry telemetry) {
-        super(new ArmPositionCommand(armSubsystem, ArmPosition.IN),
+        super(ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN),
         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
                  new InstantCommand(()->clawSubsystem.open()));
     }

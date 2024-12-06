@@ -42,7 +42,7 @@ public class CommandGroups {
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.DRIVETIME, telemetry),
                 new SequentialCommandGroup(
                         new WaitCommand(300),
-                        new ArmPositionCommand(armSubsystem, ArmPosition.IN).withTimeout(200)
+                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN).withTimeout(200)
                 )
 
         );
@@ -51,7 +51,7 @@ public class CommandGroups {
 
         return new ParallelCommandGroup(
                 new ElevatorResetCommand(elevatorSubsystem, telemetry),
-                new ArmPositionCommand(armSubsystem, ArmPosition.FORTOTALZERO),
+                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.FORTOTALZERO),
                 new UnInstantCommand(()-> clawSubsystem.open()));
 
 
@@ -128,8 +128,8 @@ public class CommandGroups {
 
             Command turnLeft = new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 90 * allienceDirection);
 
-            Command arm1= new ArmPositionCommand(armSubsystem, ArmPosition.OUT);
-            Command arm2 = new ArmPositionCommand(armSubsystem, ArmPosition.IN);
+            Command arm1= ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT);
+            Command arm2 = ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN);
 
 //            Command elevator1 = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.FIRSTSTAGE, telemetry);
             Command elevator2 = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.DOWN, telemetry);
@@ -405,8 +405,8 @@ public class CommandGroups {
         Command cam = new AprilCamCommand(webcamSubsystem, mecanumDriveSubsystem, telemetry, alliance);
         Command elevatordown = new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.DOWN, telemetry);
 
-        Command arm = new ArmPositionCommand(armSubsystem, ArmPosition.OUT);
-        Command armin = new ArmPositionCommand(armSubsystem, ArmPosition.IN);
+        Command arm = ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT);
+        Command armin = ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN);
 
         Command openclaw = new UnInstantCommand(clawSubsystem::open);
         EncoderDriveCommand strafe = new EncoderDriveCommand(mecanumDriveSubsystem, 0, 0, -0.35, 6.5);
