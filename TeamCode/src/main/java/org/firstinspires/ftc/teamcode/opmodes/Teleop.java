@@ -33,13 +33,13 @@ public class Teleop extends CommandOpMode {
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
 
 
+        IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
          Command driveCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
            ()-> driver.getLeftY(),
          () -> driver.getLeftX(),
         () -> driver.getRightX(),
         () -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),
         () -> driver.getButton(GamepadKeys.Button.A));
-
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTTWO));
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTONE));
         operator.getGamepadButton(GamepadKeys.Button.X).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.STARTTOT));
@@ -47,8 +47,8 @@ public class Teleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.DPAD_UP) .whileHeld(() ->taterTotSubsystem.up());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_LEFT) .whileHeld(() -> armSubsystem.up());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT) .whileHeld(() -> armSubsystem.down());
-        operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(() -> new IntakeSubsystem(hardwareMap, telemetry).intake());
-        operator.getGamepadButton(GamepadKeys.Button.B).whileHeld(() -> new IntakeSubsystem(hardwareMap, telemetry).opener());
+        operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(() -> intakeSubsystem.intake());
+        operator.getGamepadButton(GamepadKeys.Button.B).whileHeld(() -> intakeSubsystem.opener());
           mecanumDriveSubsystem.setDefaultCommand(driveCommand);
 register (taterTotSubsystem);
         //  register(imuSubsystem);
