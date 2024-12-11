@@ -14,7 +14,7 @@ public class RaiseToHighBasket extends ParallelCommandGroup
 {
     public RaiseToHighBasket (ArmSubsystem armSubsystem, ElevatorSubsystem elevatorSubsystem, ClawSubsystem clawSubsystem, Telemetry telemetry){
         super(ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
-                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKETTELE, telemetry)
                 );
     }
 }

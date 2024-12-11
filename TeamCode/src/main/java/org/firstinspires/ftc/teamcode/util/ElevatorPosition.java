@@ -4,7 +4,7 @@ public enum ElevatorPosition {
 
     DOWN(0),
     INTAKE(105), STARTTHING(250), OTHERSTARTTHING(200),SUBMERSIBLE(874), DRIVETIME(1100),
-    UPTHING(2180), UPPERBASKET(6200);
+    UPTHING(2180), UPPERBASKETTELE(5000), UPPERBASKET(6200);
     private int position;
 
     private ElevatorPosition(int position) {

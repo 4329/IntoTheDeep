@@ -17,6 +17,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private boolean positionControl = true;
     private boolean zeroed= false;
     private int zeroOffset = 1200;
+    private final int ELEVATORMAX = 6300;
 
     private static final double DISTANCEPERPULSE = 0.009335691828994;
 
@@ -55,11 +56,7 @@ public void elevatorAtZero(){
 
     }
 
-
-
-
     public void stop() {
-
         this.elevatorMotor.stopMotor();
     }
 
@@ -68,21 +65,16 @@ public void elevatorAtZero(){
     }
 
     public void move(double stickValue) {
-
 //        setPoint += (stickValue * 5.0);
-
         int newSetPoint = (int) (setPoint + (stickValue * 37.0));
-
         if (newSetPoint < 0) {
-
             newSetPoint = 0;
-
         }
-
+        else if (newSetPoint > ELEVATORMAX){
+            newSetPoint = ELEVATORMAX;
+        }
         setPoint = newSetPoint;
-
         this.elevatorMotor.setTargetPosition(setPoint);
-
     }
 
     public void levelUp() {
