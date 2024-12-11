@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.arcrobotics.ftclib.command.Subsystem;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -10,11 +12,11 @@ import com.qualcomm.robotcore.hardware.configuration.annotations.ServoType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.Set;
+
 public class IntakeSubsystem extends SubsystemBase {
     private CRServo servo;
     private Telemetry telemetry;
-    private double position = 0;
-    private double CLAW_SPEED = 0.05;
 
     private boolean sad = false;
 
@@ -25,16 +27,18 @@ public class IntakeSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
-
-        telemetry.addLine("servo position is:" + servo.getController().getServoPosition(0));
     }
 
     public void intake(){
-        position += CLAW_SPEED;
+        servo.setPower(1);
     }
 
     public void opener() {
-        position -= CLAW_SPEED;
+        servo.setPower(-1);
+    }
+
+    public void stop() {
+        servo.setPower(0);
     }
 
 }

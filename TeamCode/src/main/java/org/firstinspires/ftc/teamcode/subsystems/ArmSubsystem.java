@@ -44,8 +44,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void periodic() {
         if (telemetry != null){
 
-            this.telemetry.addLine("armMotor setpoint: " + setpoint);
-            this.telemetry.addLine("armMotor actual position: " + armMotor.getCurrentPosition());
+            //this.telemetry.addLine("armMotor setpoint: " + setpoint);
+            //this.telemetry.addLine("armMotor actual position: " + armMotor.getCurrentPosition());
             telemetry.update();
         }
         else{

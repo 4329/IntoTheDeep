@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.opmodes;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.CommandOpMode;
+import com.arcrobotics.ftclib.command.StartEndCommand;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TaterTotSubsystem;
@@ -19,7 +19,7 @@ public class Teleop extends CommandOpMode {
     private GamepadEx driver;
     private GamepadEx operator;
     private MecanumDriveSubsystem mecanumDriveSubsystem;
-//  private ImuSubsystem imuSubsystem;
+    //  private ImuSubsystem imuSubsystem;
     private TaterTotSubsystem taterTotSubsystem;
     private ArmSubsystem armSubsystem;
 
@@ -34,12 +34,13 @@ public class Teleop extends CommandOpMode {
 
 
         IntakeSubsystem intakeSubsystem = new IntakeSubsystem(hardwareMap, telemetry);
-         Command driveCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
-           ()-> driver.getLeftY(),
-         () -> driver.getLeftX(),
-        () -> driver.getRightX(),
-        () -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),
-        () -> driver.getButton(GamepadKeys.Button.A));
+        Command driveCommand = new MecanumDriveCommand(mecanumDriveSubsystem,
+                ()-> driver.getLeftY(),
+                () -> driver.getLeftX(),
+                () -> driver.getRightX(),
+                () -> driver.getButton(GamepadKeys.Button.LEFT_BUMPER),
+                () -> driver.getButton(GamepadKeys.Button.A));
+
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTTWO));
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.TOTONE));
         operator.getGamepadButton(GamepadKeys.Button.X).whenPressed(() ->taterTotSubsystem.totTater(TatOrTotPosition.STARTTOT));
@@ -47,10 +48,12 @@ public class Teleop extends CommandOpMode {
         operator.getGamepadButton(GamepadKeys.Button.DPAD_UP) .whileHeld(() ->taterTotSubsystem.up());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_LEFT) .whileHeld(() -> armSubsystem.up());
         operator.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT) .whileHeld(() -> armSubsystem.down());
-        operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(() -> intakeSubsystem.intake());
-        operator.getGamepadButton(GamepadKeys.Button.B).whileHeld(() -> intakeSubsystem.opener());
-          mecanumDriveSubsystem.setDefaultCommand(driveCommand);
-register (taterTotSubsystem);
+        operator.getGamepadButton(GamepadKeys.Button.A).whileHeld(new StartEndCommand(intakeSubsystem::intake, intakeSubsystem::stop));
+        operator.getGamepadButton(GamepadKeys.Button.B).whileHeld(new StartEndCommand(intakeSubsystem::opener, intakeSubsystem::stop));
+
+        mecanumDriveSubsystem.setDefaultCommand(driveCommand);
+        // SubsystemBase does this by itself...
+        // register (taterTotSubsystem);
         //  register(imuSubsystem);
     }
 }
