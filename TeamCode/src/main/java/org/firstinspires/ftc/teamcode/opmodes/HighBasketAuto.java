@@ -26,8 +26,6 @@ public class HighBasketAuto extends CommandOpMode {
     private ClawSubsystem clawSubsystem;
     private ArmSubsystem armSubsystem;
     private TurnToHeadingCommand turnToHeadingCommand;
-    private HuskyLensSubsystem huskyLensSubsystem;
-    private WebcamSubsystem webcamSubsystem;
 
 
     @Override
@@ -35,16 +33,12 @@ public class HighBasketAuto extends CommandOpMode {
 
         telemetry.speak("blue blue blue");
 
-        SpikeMarkLocation.setCurrentSpikeMark(null);
-
         mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap, telemetry);
         telemetryUpdateSubsystem = new TelemetryUpdateSubsystem(telemetry);
         imuSubsystem = new ImuSubsystem(hardwareMap, telemetry);
         elevatorSubsystem = new ElevatorSubsystem(hardwareMap, telemetry);
-        huskyLensSubsystem = new HuskyLensSubsystem(hardwareMap, telemetry);
         clawSubsystem = new ClawSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
-        webcamSubsystem = new WebcamSubsystem(hardwareMap, telemetry);
         AutoCommandFactory factory = new AutoCommandFactory(mecanumDriveSubsystem, imuSubsystem, elevatorSubsystem, clawSubsystem, armSubsystem, telemetry);
         SequentialCommandGroup yes = new SequentialCommandGroup(new InitializeNavxCommand(imuSubsystem, telemetry),factory.scoreHighBasketTaterTwo(),factory.scoreRightSample(), factory.touchLowBar());
         schedule(yes);

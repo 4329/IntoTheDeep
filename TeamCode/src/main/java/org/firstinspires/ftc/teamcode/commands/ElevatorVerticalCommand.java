@@ -13,7 +13,6 @@ public class ElevatorVerticalCommand extends CommandBase {
     private  Telemetry telemetry;
     private DoubleSupplier elevatorPower;
     public ElevatorVerticalCommand(ElevatorSubsystem elevatorSubsystem, DoubleSupplier elevatorPower, Telemetry telemetry) {
-
         this.elevatorPower = elevatorPower;
         this.elevatorSubsystem = elevatorSubsystem;
         this.telemetry = telemetry;
@@ -22,16 +21,17 @@ public class ElevatorVerticalCommand extends CommandBase {
 
     @Override
     public void execute() {
-        elevatorSubsystem.move(elevatorPower.getAsDouble());
+        double stickpower = elevatorPower.getAsDouble();
+        if (Math.abs(stickpower) > .1) {
+            elevatorSubsystem.move(stickpower);
+        }
+        else {
+            elevatorSubsystem.stop();
+        }
     }
-
-
-
 
     @Override
     public void end(boolean interrupted) {
-
-    elevatorSubsystem.stop();
-
+       elevatorSubsystem.stop();
     }
 }

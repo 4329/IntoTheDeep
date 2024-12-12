@@ -33,14 +33,14 @@ public class ClawSubsystem extends SubsystemBase {
     }
 
     public void open() {
-        position = 0.40;
+        position = 0.00;
         closed = false;
 
         telemetry.addLine("claw open");
 
     }
     public void close() {
-        position = 0;
+        position = .4;
         closed = true;
 
         telemetry.addLine("claw closed");
@@ -55,7 +55,7 @@ public class ClawSubsystem extends SubsystemBase {
         return true;//curPosition < position + range && curPosition > position - range;
     }
 
-    public void closer() {
+    public void opener() {
         if (position < 0.40) {
             position += CLAW_SPEED;
         }
@@ -65,7 +65,7 @@ public class ClawSubsystem extends SubsystemBase {
         }
     }
 
-    public void opener() {
+    public void closer() {
         if (position > 0){
             position -= CLAW_SPEED;
         }
@@ -74,6 +74,4 @@ public class ClawSubsystem extends SubsystemBase {
             closed = false;
         }
     }
-
-
 }

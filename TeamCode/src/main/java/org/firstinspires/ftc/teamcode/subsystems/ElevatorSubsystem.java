@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.util.Log;
+
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -7,7 +9,6 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.ElevatorPosition;
-import org.firstinspires.ftc.teamcode.util.MathUtil;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private int setPoint;
@@ -23,7 +24,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     public ElevatorSubsystem(HardwareMap hm, Telemetry telemetry) {
         this.telemetry = telemetry;
-        elevatorMotor = new Motor(hm, "elevatorMotor");
+        this.elevatorMotor = new Motor(hm, "elevatorMotor");
         this.elevatorSensor = hm.get(TouchSensor.class, "elevatorSensor");
         switchPosition();
     }
@@ -46,9 +47,16 @@ public void elevatorAtZero(){
             telemetry.addLine("the elevator is pressed?" + elevatorSensor.isPressed());
         }
 
-        if(this.elevatorMotor!=null && positionControl){
-           this.elevatorMotor.set(0.5);
 
+        if(this.elevatorMotor!=null && positionControl && !uThereYet()){
+           Log.d("ELEVATOR", String.format("elev setpoint, pos, power, pos control, pressed? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorSensor.isPressed() + ""));
+           //this.elevatorMotor.set(0.5);
+            this.elevatorMotor.set(0.1);
+
+        }
+        else {
+//           this.elevatorMotor.set(0.0);
+           Log.d("ELEVATOR", String.format("NO POWER ON MOTOR elev setpoint, pos, power, pos control, pressed? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorSensor.isPressed() + ""));
         }
 
         telemetry.addLine("Elevator setPoint:" + setPoint);
@@ -73,6 +81,7 @@ public void elevatorAtZero(){
         else if (newSetPoint > ELEVATORMAX){
             newSetPoint = ELEVATORMAX;
         }
+        Log.d("ELEVATOR", "manually moving to: " + newSetPoint);
         setPoint = newSetPoint;
         this.elevatorMotor.setTargetPosition(setPoint);
     }
@@ -119,14 +128,16 @@ public void elevatorAtZero(){
 
     public void switchPosition() {
 
-        elevatorMotor.setDistancePerPulse(DISTANCEPERPULSE);
+        this.elevatorMotor.setDistancePerPulse(DISTANCEPERPULSE);
         this.elevatorMotor.setInverted(true);
         this.elevatorMotor.setRunMode(Motor.RunMode.PositionControl);
+        this.setPoint = 0;
+        this.elevatorMotor.setTargetPosition(0);
         this.elevatorMotor.setPositionCoefficient(1);
-        this.elevatorMotor.setFeedforwardCoefficients(0,0.35);
+      //  this.elevatorMotor.setFeedforwardCoefficients(0,0.35);
+        this.elevatorMotor.setFeedforwardCoefficients(0,0.0);
         this.elevatorMotor.setPositionTolerance(5);
         this.elevatorMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        this.setPoint = 0;
         this.elevatorMotor.encoder.reset();
         this.positionControl = true;
     }

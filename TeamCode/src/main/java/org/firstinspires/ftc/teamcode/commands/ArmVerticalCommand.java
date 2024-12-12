@@ -13,20 +13,19 @@ public class ArmVerticalCommand extends CommandBase {
     private  Telemetry telemetry;
     private DoubleSupplier armPower;
     public ArmVerticalCommand(ArmSubsystem armSubsystem, DoubleSupplier armPower, Telemetry telemetry) {
-
         this.armPower = armPower;
-this.armSubsystem = armSubsystem;
-this.telemetry = telemetry;
+        this.armSubsystem = armSubsystem;
+        this.telemetry = telemetry;
         addRequirements(armSubsystem);
     }
 
     @Override
     public void execute() {
-        armSubsystem.move(armPower.getAsDouble());
+        double stickPower = armPower.getAsDouble();
+        if (Math.abs(stickPower) > .1) {
+            armSubsystem.move(armPower.getAsDouble());
+        }
     }
-
-
-
 
 //    @Override
 //    public void end(boolean interrupted) {
