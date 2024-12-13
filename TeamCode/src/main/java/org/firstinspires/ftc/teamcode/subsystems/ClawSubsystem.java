@@ -22,7 +22,6 @@ public class ClawSubsystem extends SubsystemBase {
     public ClawSubsystem(HardwareMap hardwareMap, Telemetry telemetry) {
         this.telemetry = telemetry;
         this.servo = hardwareMap.get(Servo.class, "clawServo");
-        open();
     }
 
 

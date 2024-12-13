@@ -39,7 +39,7 @@ public class AutoCommandFactory {
 
     public Command scoreHighBasketTaterTwo () {
         return new SequentialCommandGroup(
-             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.OTHERSTARTTHING, telemetry),
              new UnInstantCommand(()->clawSubsystem.close()),
              rMove(15,0),
              forward(11, 0),
@@ -52,7 +52,7 @@ public class AutoCommandFactory {
              new UnInstantCommand(()->clawSubsystem.open()),
              backUp(7, 45),
              new ParallelCommandGroup(
-                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry), ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
+                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry), ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
              ).withTimeout(2500),
              new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
              lMove(2, -90)
@@ -62,7 +62,7 @@ public class AutoCommandFactory {
 
     public Command scoreRightSample (){
         return new SequentialCommandGroup (
-            new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+            new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
             forward (9, -90),
             new UnInstantCommand(()->clawSubsystem.close()),
             new WaitCommand (1000),
@@ -76,7 +76,7 @@ public class AutoCommandFactory {
             new UnInstantCommand(()->clawSubsystem.open()),
             backUp (7, 45),
             new ParallelCommandGroup(
-                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.STARTTHING, telemetry),
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.OTHERSTARTTHING, telemetry),
                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
             ).withTimeout(2500),
             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180)
@@ -87,7 +87,8 @@ public class AutoCommandFactory {
         return new SequentialCommandGroup(
                 new ParallelCommandGroup(
                     ArmPositionCommand.createCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
-                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.5, 0,-1, 47)
+                    new UnInstantCommand(() ->clawSubsystem.close()),
+                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.4, 0,-1, 50)
                 ),
                 forward(2,180),
                 ArmPositionCommand.createCommand(armSubsystem,ArmPosition.BARAUTO).withTimeout(250)

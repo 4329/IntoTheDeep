@@ -48,16 +48,16 @@ public void elevatorAtZero(){
         }
 
 
-        if(this.elevatorMotor!=null && positionControl && !uThereYet()){
-           Log.d("ELEVATOR", String.format("elev setpoint, pos, power, pos control, pressed? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorSensor.isPressed() + ""));
-           //this.elevatorMotor.set(0.5);
-            this.elevatorMotor.set(0.1);
+        if(this.elevatorMotor!=null && positionControl){
+           Log.d("ELEVATOR", String.format("elev setpoint, pos, power, pos control, atTarget? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorMotor.atTargetPosition() + ""));
+           this.elevatorMotor.set(1);
+//            this.elevatorMotor.set(0.1);
 
         }
-        else {
+//        else {
 //           this.elevatorMotor.set(0.0);
-           Log.d("ELEVATOR", String.format("NO POWER ON MOTOR elev setpoint, pos, power, pos control, pressed? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorSensor.isPressed() + ""));
-        }
+//           Log.d("ELEVATOR", String.format("NO POWER ON MOTOR elev setpoint, pos, power, pos control, pressed? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorSensor.isPressed() + ""));
+//        }
 
         telemetry.addLine("Elevator setPoint:" + setPoint);
         telemetry.addLine("Elevator is at:" + elevatorMotor.getCurrentPosition());
@@ -74,7 +74,7 @@ public void elevatorAtZero(){
 
     public void move(double stickValue) {
 //        setPoint += (stickValue * 5.0);
-        int newSetPoint = (int) (setPoint + (stickValue * 37.0));
+        int newSetPoint = (int) (setPoint + (stickValue * 77.0));
         if (newSetPoint < 0) {
             newSetPoint = 0;
         }
@@ -112,12 +112,12 @@ public void elevatorAtZero(){
     }
 
     public void goDown() {
-        elevatorMotor.set(-0.5);
+        elevatorMotor.set(-1);
     }
 
     public void goUp() {
 
-        elevatorMotor.set(0.2);
+        elevatorMotor.set(0.7);
 
     }
 
@@ -134,8 +134,8 @@ public void elevatorAtZero(){
         this.setPoint = 0;
         this.elevatorMotor.setTargetPosition(0);
         this.elevatorMotor.setPositionCoefficient(1);
-      //  this.elevatorMotor.setFeedforwardCoefficients(0,0.35);
-        this.elevatorMotor.setFeedforwardCoefficients(0,0.0);
+        this.elevatorMotor.setFeedforwardCoefficients(0,0.35);
+//        this.elevatorMotor.setFeedforwardCoefficients(0,0.0);
         this.elevatorMotor.setPositionTolerance(5);
         this.elevatorMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
         this.elevatorMotor.encoder.reset();
