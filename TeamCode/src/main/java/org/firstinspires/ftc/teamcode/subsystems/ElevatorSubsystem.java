@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.util.RobotConfig.ELEV_D;
+import static org.firstinspires.ftc.teamcode.util.RobotConfig.ELEV_I;
+import static org.firstinspires.ftc.teamcode.util.RobotConfig.ELEV_I_MAX;
+import static org.firstinspires.ftc.teamcode.util.RobotConfig.ELEV_I_MIN;
+import static org.firstinspires.ftc.teamcode.util.RobotConfig.ELEV_P;
+import static org.firstinspires.ftc.teamcode.util.RobotConfig.ELEV_TOLERANCE;
+
 import android.util.Log;
 
 import com.arcrobotics.ftclib.command.SubsystemBase;
@@ -9,12 +16,16 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.util.ElevatorPosition;
+import org.firstinspires.ftc.teamcode.util.FrcPidController;
+import org.firstinspires.ftc.teamcode.util.MathUtil;
+import org.firstinspires.ftc.teamcode.util.RobotConfig;
 
 public class ElevatorSubsystem extends SubsystemBase {
     private int setPoint;
     private Motor elevatorMotor;
     private Telemetry telemetry;
     private TouchSensor elevatorSensor;
+    private FrcPidController pidController;
     private boolean positionControl = true;
     private boolean zeroed= false;
     private int zeroOffset = 1200;
@@ -26,20 +37,32 @@ public class ElevatorSubsystem extends SubsystemBase {
         this.telemetry = telemetry;
         this.elevatorMotor = new Motor(hm, "elevatorMotor");
         this.elevatorSensor = hm.get(TouchSensor.class, "elevatorSensor");
+        this.elevatorMotor.setRunMode(Motor.RunMode.RawPower);
+        this.elevatorMotor.setInverted(true);
+        this.elevatorMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
+        this.pidController = new FrcPidController(ELEV_P, ELEV_I, ELEV_D);
         switchPosition();
+        resetPidController();
+    }
+
+    public void resetPidController() {
+        pidController.setPID(ELEV_P, ELEV_I, ELEV_D);
+        pidController.setIntegratorRange(ELEV_I_MIN, ELEV_I_MAX);
+        pidController.setTolerance(ELEV_TOLERANCE);
+        pidController.setSetpoint(setPoint);
+        pidController.reset();
     }
 
     public void goToPosition(ElevatorPosition sammy) {
         this.setPoint = sammy.getPosition() + (zeroed ? zeroOffset : 0);
-        this.elevatorMotor.setTargetPosition(this.setPoint);
-
-
-
-
+        pidController.setSetpoint(setPoint);
+        resetPidController(); // if we change the setpoint, we should clear out our error.
+        //this.elevatorMotor.setTargetPosition(this.setPoint);
     }
-public void elevatorAtZero(){
+
+    public void elevatorAtZero(){
         zeroed = true;
-}
+    }
 
     @Override
     public void periodic() {
@@ -47,29 +70,33 @@ public void elevatorAtZero(){
             telemetry.addLine("the elevator is pressed?" + elevatorSensor.isPressed());
         }
 
-
         if(this.elevatorMotor!=null && positionControl){
-           Log.d("ELEVATOR", String.format("elev setpoint, pos, power, pos control, atTarget? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorMotor.atTargetPosition() + ""));
-           this.elevatorMotor.set(1);
-//            this.elevatorMotor.set(0.1);
-
+            doPid();
         }
-//        else {
-//           this.elevatorMotor.set(0.0);
-//           Log.d("ELEVATOR", String.format("NO POWER ON MOTOR elev setpoint, pos, power, pos control, pressed? %d, %d, %f, %s, %s", setPoint, elevatorMotor.getCurrentPosition(), elevatorMotor.get(), positionControl + "", elevatorSensor.isPressed() + ""));
-//        }
 
         telemetry.addLine("Elevator setPoint:" + setPoint);
         telemetry.addLine("Elevator is at:" + elevatorMotor.getCurrentPosition());
+        telemetry.addLine(String.format("ELEV PID: (%.3f, %.3f, %.3f)", pidController.getD(), pidController.getI(), pidController.getD()));
+        telemetry.addLine(String.format("ELEV tol: %.3f, IR (%.2f, %.2f), tol: ", pidController.getPositionTolerance(), ELEV_I_MIN, ELEV_I_MAX));
+    }
 
+    private void doPid() {
+        if (!pidController.atSetpoint()) {
+            double encPosition = elevatorMotor.encoder.getPosition();
+            double output = pidController.calculate(encPosition);
+            output += (output > 0) ? RobotConfig.ELEV_FF : -RobotConfig.ELEV_FF;
+            double clampedOutput = MathUtil.clamp(output, -.75, .3333);
+
+            Log.i("ELEV PID", String.format("output: %.3f, clamped: %.3f, setpoint: %d, position: %.3f", output, clampedOutput, setPoint, encPosition));
+            this.elevatorMotor.set(clampedOutput);
+        }
+        else {
+            this.elevatorMotor.set(0); // is brake mode enough?
+        }
     }
 
     public void stop() {
         this.elevatorMotor.stopMotor();
-    }
-
-    public void setZero() {
-        setPoint =0;
     }
 
     public void move(double stickValue) {
@@ -83,28 +110,24 @@ public void elevatorAtZero(){
         }
         Log.d("ELEVATOR", "manually moving to: " + newSetPoint);
         setPoint = newSetPoint;
-        this.elevatorMotor.setTargetPosition(setPoint);
+        pidController.setSetpoint(setPoint);
+        resetPidController();
+        //this.elevatorMotor.setTargetPosition(setPoint);
     }
 
     public void levelUp() {
-
         ElevatorPosition up = ElevatorPosition.nextHighest(setPoint);
         goToPosition(up);
     }
 
     public void levelDown() {
-
         ElevatorPosition down = ElevatorPosition.nextLowest(setPoint);
         goToPosition(down);
-
-
     }
 
     public boolean uThereYet(){
-
-        return elevatorMotor.atTargetPosition();
-
-        }
+        return pidController.atSetpoint();
+    }
 
     public boolean isDown() {
         telemetry.addLine("ELEVATORISDOWN" + elevatorSensor.isPressed());
@@ -116,31 +139,17 @@ public void elevatorAtZero(){
     }
 
     public void goUp() {
-
         elevatorMotor.set(0.7);
-
     }
 
     public void switchPower() {
-        this.elevatorMotor.setRunMode(Motor.RunMode.RawPower);
         this.positionControl = false;
     }
 
     public void switchPosition() {
-
-        this.elevatorMotor.setDistancePerPulse(DISTANCEPERPULSE);
-        this.elevatorMotor.setInverted(true);
-        this.elevatorMotor.setRunMode(Motor.RunMode.PositionControl);
-        this.setPoint = 0;
-        this.elevatorMotor.setTargetPosition(0);
-        this.elevatorMotor.setPositionCoefficient(1);
-        this.elevatorMotor.setFeedforwardCoefficients(0,0.35);
-//        this.elevatorMotor.setFeedforwardCoefficients(0,0.0);
-        this.elevatorMotor.setPositionTolerance(5);
-        this.elevatorMotor.setZeroPowerBehavior(Motor.ZeroPowerBehavior.BRAKE);
-        this.elevatorMotor.encoder.reset();
         this.positionControl = true;
+        this.setPoint = 0;
+        this.elevatorMotor.encoder.reset();
+        resetPidController();
     }
-
-
 }

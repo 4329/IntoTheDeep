@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.commands.MecanumDpadCommand;
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.PickUpSample;
 import org.firstinspires.ftc.teamcode.commands.RaiseToHighBasket;
+import org.firstinspires.ftc.teamcode.commands.UnInstantCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
@@ -77,6 +78,7 @@ public class MatchTeleop extends CommandOpMode {
 //        operator.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(CommandGroups.elevatorDrive(elevatorSubsystem, armSubsystem, telemetry));
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(totalZeroCommandGroup);
         operator.getGamepadButton(GamepadKeys.Button.START).whenPressed(new PickUpSample(armSubsystem, elevatorSubsystem, clawSubsystem, telemetry));
+        operator.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(() -> elevatorSubsystem.resetPidController());
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new RaiseToHighBasket(armSubsystem, elevatorSubsystem, clawSubsystem, telemetry));
         mecanumDriveSubsystem.setDefaultCommand(driveMecanumCommand);
         elevatorSubsystem.setDefaultCommand(elevatorVerticalCommand);
