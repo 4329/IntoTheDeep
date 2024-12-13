@@ -13,7 +13,7 @@ public class ArmPositionCommand extends CommandBase {
     private final ArmPosition armPosition;
     private final ArmSubsystem armSubsystem;
 
-    private ArmPositionCommand(ArmSubsystem armSubsystem, ArmPosition armPosition) {
+    ArmPositionCommand(ArmSubsystem armSubsystem, ArmPosition armPosition) {
 
 
     this.armPosition = armPosition;

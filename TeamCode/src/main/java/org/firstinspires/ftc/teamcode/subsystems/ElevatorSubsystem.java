@@ -17,7 +17,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     private TouchSensor elevatorSensor;
     private boolean positionControl = true;
     private boolean zeroed= false;
-    private int zeroOffset = 1200;
+    private int zeroOffset = 1150;
     private final int ELEVATORMAX = 6300;
 
     private static final double DISTANCEPERPULSE = 0.009335691828994;

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.commands.MecanumDpadCommand;
 import org.firstinspires.ftc.teamcode.commands.MecanumDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.PickUpSample;
 import org.firstinspires.ftc.teamcode.commands.RaiseToHighBasket;
+import org.firstinspires.ftc.teamcode.commands.ScoreCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
@@ -32,7 +33,6 @@ public class MatchTeleop extends CommandOpMode {
     private ElevatorSubsystem elevatorSubsystem;
     private MecanumDriveSubsystem mecanumDriveSubsystem;
     private TelemetryUpdateSubsystem telemetryUpdateSubsystem;
-    private ImuSubsystem imuSubsystem;
     private ClawSubsystem clawSubsystem;
     private ArmSubsystem armSubsystem;
     private Command totalZeroCommandGroup;
@@ -44,7 +44,6 @@ public class MatchTeleop extends CommandOpMode {
         operator = new GamepadEx(gamepad2);
         mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap, telemetry);
         telemetryUpdateSubsystem = new TelemetryUpdateSubsystem(telemetry);
-        imuSubsystem = new ImuSubsystem(hardwareMap, telemetry);
         elevatorSubsystem = new ElevatorSubsystem(hardwareMap, telemetry);
         clawSubsystem = new ClawSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
@@ -76,15 +75,14 @@ public class MatchTeleop extends CommandOpMode {
 
 //        operator.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(CommandGroups.elevatorDrive(elevatorSubsystem, armSubsystem, telemetry));
         operator.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(totalZeroCommandGroup);
+        operator.getGamepadButton(GamepadKeys.Button.BACK).whenPressed(new ScoreCommand(armSubsystem, clawSubsystem));
         operator.getGamepadButton(GamepadKeys.Button.START).whenPressed(new PickUpSample(armSubsystem, elevatorSubsystem, clawSubsystem, telemetry));
         operator.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(new RaiseToHighBasket(armSubsystem, elevatorSubsystem, clawSubsystem, telemetry));
         mecanumDriveSubsystem.setDefaultCommand(driveMecanumCommand);
         elevatorSubsystem.setDefaultCommand(elevatorVerticalCommand);
         armSubsystem.setDefaultCommand(armVerticalCommand);
 
-        register(imuSubsystem, telemetryUpdateSubsystem);
-
-        schedule(new InitializeNavxCommand(imuSubsystem, telemetry));
+        register(telemetryUpdateSubsystem);
     }
 }
 //

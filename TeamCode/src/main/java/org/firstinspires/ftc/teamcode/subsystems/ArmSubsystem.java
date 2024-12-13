@@ -14,11 +14,8 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem(HardwareMap hm, Telemetry jerry) {
         this.armMotor = new Motor(hm, "armMotor");
-        this.setPoint = 0;
-        this.armMotor.encoder.reset();
         this.armMotor.setInverted(false);
         this.telemetry = jerry;
-        this.armMotor.setTargetPosition(0);
         this.armMotor.setRunMode(Motor.RunMode.PositionControl);
         this.armMotor.setPositionCoefficient(0.45);
         this.armMotor.setPositionTolerance(0.5);
@@ -31,6 +28,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void resetEncoder() {
+        this.setPoint = 0;
+        armMotor.setTargetPosition(0);
         this.armMotor.encoder.reset();
     }
 

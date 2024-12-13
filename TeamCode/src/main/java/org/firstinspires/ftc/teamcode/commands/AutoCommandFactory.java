@@ -50,6 +50,7 @@ public class AutoCommandFactory {
              ).withTimeout(3000 ),
              forward(7, 45),
              new UnInstantCommand(()->clawSubsystem.open()),
+             new WaitCommand(750),
              backUp(7, 45),
              new ParallelCommandGroup(
                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry), ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
@@ -74,6 +75,7 @@ public class AutoCommandFactory {
             ).withTimeout(3000),
             forward(7, 50),
             new UnInstantCommand(()->clawSubsystem.open()),
+            new WaitCommand(750),
             backUp (7, 45),
             new ParallelCommandGroup(
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.OTHERSTARTTHING, telemetry),
