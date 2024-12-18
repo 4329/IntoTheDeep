@@ -93,7 +93,8 @@ public class AutoCommandFactory {
                     new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.4, 0,-1, 50)
                 ),
                 forward(2,180),
-                ArmPositionCommand.createCommand(armSubsystem,ArmPosition.BARAUTO).withTimeout(250)
+                ArmPositionCommand.createCommand(armSubsystem,ArmPosition.BARAUTO).withTimeout(250),
+                new UnInstantCommand(()-> armSubsystem.stop())
         );
     }
 
@@ -127,6 +128,36 @@ public class AutoCommandFactory {
 
     private Command rMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .21, inches);
+    }
+
+    public Command hangHighSample() {
+        return new SequentialCommandGroup(
+                new UnInstantCommand(()->clawSubsystem.close()),
+                new ParallelCommandGroup(
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.SPECIMINHANG, telemetry),
+                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.SPECIMANEHANG)),
+                forward (26, 0),
+                new UnInstantCommand(() ->clawSubsystem.open()),
+                backUp(5, 0)
+
+
+
+        );
+    }
+
+    public Command grabBlueSample() {
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.DRIVETIME, telemetry),
+                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)),
+                rMove(29, 0),
+                forward(28,0),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180),
+                lMove(10,180),
+                forward(45, 180)
+
+        );
+
     }
 }
 
