@@ -125,23 +125,24 @@ public class AutoCommandFactory {
     private Command lMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.3, inches);
     }
-
+    private Command lFastMove (double inches, double heading) {
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.7, inches);
+    }
     private Command rMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .21, inches);
     }
-
+    private Command rFastMove (double inches, double heading) {
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .7, inches);
+    }
     public Command hangHighSample() {
         return new SequentialCommandGroup(
                 new UnInstantCommand(()->clawSubsystem.close()),
                 new ParallelCommandGroup(
-                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.SPECIMINHANG, telemetry),
-                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.SPECIMANEHANG)),
+                    new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.SPECIMINHANG, telemetry),
+                    ArmPositionCommand.createCommand(armSubsystem, ArmPosition.SPECIMANEHANG)),
                 forward (26, 0),
                 new UnInstantCommand(() ->clawSubsystem.open()),
                 backUp(5, 0)
-
-
-
         );
     }
 
@@ -155,9 +156,39 @@ public class AutoCommandFactory {
                 new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180),
                 lMove(10,180),
                 forward(45, 180)
-
         );
+    }
 
+    public Command pickUpSampleOffWall() {
+        return new SequentialCommandGroup(
+            new ParallelCommandGroup(
+                    new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.WALLSPECIMIN, telemetry),
+                    ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN),
+                    rMove(29, 0)),
+                forward(28,0),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 180),
+                lMove(11,180),
+                forward(50, 180),
+                new WaitCommand(500),
+                new UnInstantCommand(() -> clawSubsystem.close()),
+                new WaitCommand(500),
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.SPECIMINHANG, telemetry),
+                backUp(10, 180),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0),
+                new ParallelCommandGroup(
+                    lFastMove(53, 0),
+                    ArmPositionCommand.createCommand(armSubsystem, ArmPosition.SPECIMANEHANG)
+                ),
+                forward(20, 0),
+                new WaitCommand(200),
+                new UnInstantCommand(() -> clawSubsystem.open()),
+                backUp(22, 0),
+                new ParallelCommandGroup(
+                        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.DOWN, telemetry),
+                        rFastMove(37, 0),
+                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
+                )
+        );
     }
 }
 
