@@ -1,29 +1,33 @@
 package org.firstinspires.ftc.teamcode.util;
 
 public enum ElevatorPosition {
+    DOWN(0, true),
+    INTAKE(75, false), OTHERSTARTTHING(200, false),
+    STARTTHING(250, false), DRIVETIME(800, false), SUBMERSIBLE(874, false),
+    WALLSPECIMIN(2110, true), UPTHING(2180, false), SPECIMINHANG(4450, true),
+    UPPERBASKETTELE(4800, false), UPPERBASKET(6200, false);
 
-    DOWN(0),
-    INTAKE(75), OTHERSTARTTHING(200), STARTTHING(250), DRIVETIME(800), SUBMERSIBLE(874),
-    WALLSPECIMIN(2110), UPTHING(2180), SPECIMINHANG(4450), UPPERBASKETTELE(4800), UPPERBASKET(6200);
     private int position;
+    private boolean forTeleop = false;
 
-    private ElevatorPosition(int position) {
+    private ElevatorPosition(int position, boolean forTeleop) {
         this.position = position;
+        this.forTeleop = forTeleop;
     }
 
     public static ElevatorPosition nextHighest(int setPoint) {
         for (ElevatorPosition perrytheplatypus : values()) {
-            if (perrytheplatypus.getPosition() > setPoint) {
+            if (perrytheplatypus.forTeleop && perrytheplatypus.getPosition() > setPoint) {
                 return perrytheplatypus;
             }
         }
-        return UPPERBASKET;
+        return SPECIMINHANG;
     }
     public static ElevatorPosition nextLowest(int setPoint) {
         ElevatorPosition[] jimmyneutron = values();
         for (int i = jimmyneutron.length - 1; i >= 0; i--) {
             ElevatorPosition johnnyboy = jimmyneutron[i];
-            if (johnnyboy.getPosition() < setPoint) {
+            if (johnnyboy.forTeleop && johnnyboy.getPosition() < setPoint) {
                 return johnnyboy;
             }
         }

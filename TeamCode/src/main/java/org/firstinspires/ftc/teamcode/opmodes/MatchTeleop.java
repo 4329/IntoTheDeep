@@ -66,7 +66,7 @@ public class MatchTeleop extends CommandOpMode {
         ElevatorVerticalCommand elevatorVerticalCommand = new ElevatorVerticalCommand(elevatorSubsystem, () -> operator.getLeftY(), telemetry);
         ArmVerticalCommand armVerticalCommand = new ArmVerticalCommand(armSubsystem, () -> operator.getRightY(), telemetry);
         operator.getGamepadButton(GamepadKeys.Button.X).whenHeld(clawCloserCommand);
-        operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.OUT));
+        operator.getGamepadButton(GamepadKeys.Button.Y).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.SPECIMANEHANG));
         operator.getGamepadButton(GamepadKeys.Button.A).whenPressed(()-> armSubsystem.goToPosition(ArmPosition.IN));
         operator.getGamepadButton(GamepadKeys.Button.B).whenHeld(clawOpenerCommand);
 
