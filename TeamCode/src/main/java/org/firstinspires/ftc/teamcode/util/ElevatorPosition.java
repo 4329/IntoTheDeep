@@ -4,7 +4,7 @@ public enum ElevatorPosition {
     DOWN(0, true),
     INTAKE(75, false), OTHERSTARTTHING(200, false),
     STARTTHING(250, false), DRIVETIME(800, false), SUBMERSIBLE(874, false),
-    WALLSPECIMIN(2110, true), UPTHING(2180, false), SPECIMINHANG(4450, true),
+    WALLSPECIMIN(2042, true), UPTHING(2180, false), SPECIMINHANG(4450, true),
     UPPERBASKETTELE(4800, false), UPPERBASKET(6200, false);
 
     private int position;
