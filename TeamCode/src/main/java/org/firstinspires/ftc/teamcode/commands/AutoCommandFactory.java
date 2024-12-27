@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
+import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
@@ -121,6 +122,9 @@ public class AutoCommandFactory {
     private Command forward (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.35, 0, 0, inches);
     }
+    private Command slowForward (double inches, double heading) {
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.2, 0, 0, inches);
+    }
 
     private Command lMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.3, inches);
@@ -170,16 +174,18 @@ public class AutoCommandFactory {
                 lMove(11,180),
                 forward(50, 180),
                 new WaitCommand(500),
-                new UnInstantCommand(() -> clawSubsystem.close()),
+                //--------------------------------------------------------------------------------------------------------------
+                new ParallelCommandGroup(
+                      new UnInstantCommand(() -> clawSubsystem.close()),
+                      slowForward(50,180)).withTimeout(1000),
                 new WaitCommand(500),
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.SPECIMINHANG, telemetry),
                 backUp(10, 180),
                 new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0),
                 new ParallelCommandGroup(
                     lFastMove(53, 0),
-                    ArmPositionCommand.createCommand(armSubsystem, ArmPosition.SPECIMANEHANG)
-                ),
-                forward(20, 0),
+                    ArmPositionCommand.createCommand(armSubsystem, ArmPosition.SPECIMANEHANG)),
+                forward(16, 0),
                 new WaitCommand(200),
                 new UnInstantCommand(() -> clawSubsystem.open()),
                 backUp(22, 0),
