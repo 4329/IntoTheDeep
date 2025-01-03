@@ -198,5 +198,21 @@ public class AutoCommandFactory {
                 )
         );
     }
+
+    public Command strafeToFirstSample() {
+        return new ParallelCommandGroup(
+                new ElevatorPosCommand (elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
+                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN),
+                lMove (28,0)
+        );
+    }
+
+    public Command advanceToSample() {
+        return new SequentialCommandGroup(
+                forward (11,0),
+                new UnInstantCommand (()->clawSubsystem.close())
+        );
+
+    }
 }
 
