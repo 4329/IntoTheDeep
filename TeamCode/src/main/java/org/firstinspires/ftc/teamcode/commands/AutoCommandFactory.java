@@ -49,15 +49,16 @@ public class AutoCommandFactory {
                  ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
              ).withTimeout(3000 ),
-             forward(7, 45),
-             new UnInstantCommand(()->clawSubsystem.open()),
-             new WaitCommand(750),
-             backUp(7, 45),
+             forward(5, 45),
+             new ScoreCommand(armSubsystem, clawSubsystem),
+//             new UnInstantCommand(()->clawSubsystem.open()),
+//             new WaitCommand(750),
+             backUp(5, 45),
              new ParallelCommandGroup(
                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry), ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
              ).withTimeout(2500),
              new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
-             lMove(2, -90)
+             lMove(2.25, -90)
         );
     }
 
@@ -65,19 +66,20 @@ public class AutoCommandFactory {
     public Command scoreRightSample (){
         return new SequentialCommandGroup (
             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
-            forward (9, -90),
+            forward (14, -90),
             new UnInstantCommand(()->clawSubsystem.close()),
             new WaitCommand (1000),
-            backUp(10, -90),
+            backUp(15, -90),
             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
             new ParallelCommandGroup(
                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
             ).withTimeout(3000),
-            forward(7, 50),
-            new UnInstantCommand(()->clawSubsystem.open()),
-            new WaitCommand(750),
-            backUp (7, 45),
+            forward(5, 50),
+                new ScoreCommand(armSubsystem, clawSubsystem),
+//            new UnInstantCommand(()->clawSubsystem.open()),
+//            new WaitCommand(750),
+            backUp (6, 45),
             new ParallelCommandGroup(
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.OTHERSTARTTHING, telemetry),
                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
