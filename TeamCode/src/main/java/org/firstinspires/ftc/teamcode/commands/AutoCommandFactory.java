@@ -57,8 +57,10 @@ public class AutoCommandFactory {
              new ParallelCommandGroup(
                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry), ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
              ).withTimeout(2500),
-             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
-             lMove(2.25, -90)
+             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90) //,
+             // lMove(2.25, -90)
+                // rMove(.5, -90)
+
         );
     }
 
@@ -66,16 +68,21 @@ public class AutoCommandFactory {
     public Command scoreRightSample (){
         return new SequentialCommandGroup (
             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
-            forward (14, -90),
+            lMove(.5, -90),
+                forward (14, -90),
+                new WaitCommand (500),
             new UnInstantCommand(()->clawSubsystem.close()),
             new WaitCommand (1000),
-            backUp(15, -90),
-            new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
+          //  backUp(15, -90),
+            new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 90),
             new ParallelCommandGroup(
+                    forward(15, 90),
                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
+
             ).withTimeout(3000),
-            forward(5, 50),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
+                forward(5,45),
                 new ScoreCommand(armSubsystem, clawSubsystem),
 //            new UnInstantCommand(()->clawSubsystem.open()),
 //            new WaitCommand(750),
@@ -96,7 +103,7 @@ public class AutoCommandFactory {
                     new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.4, 0,-1, 50)
                 ),
                 forward(2,180),
-                ArmPositionCommand.createCommand(armSubsystem,ArmPosition.BARAUTO).withTimeout(250),
+               // ArmPositionCommand.createCommand(armSubsystem,ArmPosition.BARAUTO).withTimeout(125),
                 new UnInstantCommand(()-> armSubsystem.stop())
         );
     }
