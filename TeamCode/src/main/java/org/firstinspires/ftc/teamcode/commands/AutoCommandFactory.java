@@ -40,20 +40,23 @@ public class AutoCommandFactory {
 
     public Command scoreHighBasketTaterTwo () {
         return new SequentialCommandGroup(
-             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.OTHERSTARTTHING, telemetry),
+//             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.OTHERSTARTTHING, telemetry),
              new UnInstantCommand(()->clawSubsystem.close()),
-             rMove(15,0),
+                new ParallelCommandGroup(
+                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry),
+             rMove(15,0)).withTimeout(3000),
+
              forward(11, 0),
              new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45),
-             new ParallelCommandGroup(
-                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
-                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry)
-             ).withTimeout(3000 ),
+//             new ParallelCommandGroup(
+
+//             ).withTimeout(3000 ),
              forward(5, 45),
              new ScoreCommand(armSubsystem, clawSubsystem),
 //             new UnInstantCommand(()->clawSubsystem.open()),
 //             new WaitCommand(750),
-             backUp(5, 45),
+             backUp(6, 45),
              new ParallelCommandGroup(
                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry), ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
              ).withTimeout(2500),
@@ -68,7 +71,7 @@ public class AutoCommandFactory {
     public Command scoreRightSample (){
         return new SequentialCommandGroup (
             new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
-            lMove(.5, -90),
+            lMove(.7, -90),
                 forward (14, -90),
                 new WaitCommand (500),
             new UnInstantCommand(()->clawSubsystem.close()),
@@ -100,11 +103,11 @@ public class AutoCommandFactory {
                 new ParallelCommandGroup(
                     ArmPositionCommand.createCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
                     new UnInstantCommand(() ->clawSubsystem.close()),
-                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.4, 0,-1, 50)
+                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.3, 0,-2, 50)
                 ),
-                forward(2,180),
-               // ArmPositionCommand.createCommand(armSubsystem,ArmPosition.BARAUTO).withTimeout(125),
-                new UnInstantCommand(()-> armSubsystem.stop())
+                forward(3,180),
+                ArmPositionCommand.createCommand(armSubsystem,(ArmPosition.BARAUTO)).withTimeout(125)
+//                new UnInstantCommand(()-> armSubsystem.stop())
         );
     }
 
