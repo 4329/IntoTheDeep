@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
 public enum TatOrTotPosition {
-    STARTTOT(0),TOTONE(30),TOTTWO(2000), MAXIMUM(3125);
+    STARTTOT(0),TOTONE(30),TOTTWO(1450), MAXIMUM(1490);
 
     private final int value;
 

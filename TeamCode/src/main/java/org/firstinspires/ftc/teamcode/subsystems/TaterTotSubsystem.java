@@ -40,8 +40,8 @@ public class TaterTotSubsystem extends SubsystemBase {
     public void periodic() {
         if (telemetry != null){
 
-            //this.telemetry.addLine("tatertot setpoint: " + setpoint);
-            //this.telemetry.addLine("tatertot actual position: " + tatertot.getCurrentPosition());
+            this.telemetry.addLine("tatertot setpoint: " + setpoint);
+            this.telemetry.addLine("tatertot actual position: " + tatertot.getCurrentPosition());
 //telemetry.update();
         }
         else{
