@@ -106,8 +106,10 @@ public class AutoCommandFactory {
                     new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.3, 0,-2, 50)
                 ),
                 forward(3,180),
-                ArmPositionCommand.createCommand(armSubsystem,(ArmPosition.BARAUTO)).withTimeout(125)
-//                new UnInstantCommand(()-> armSubsystem.stop())
+                ArmPositionCommand.createCommand(armSubsystem,(ArmPosition.BARAUTO)).withTimeout(125),
+                new WaitCommand(500),
+                new UnInstantCommand(()-> armSubsystem.stop())
+
         );
     }
 
