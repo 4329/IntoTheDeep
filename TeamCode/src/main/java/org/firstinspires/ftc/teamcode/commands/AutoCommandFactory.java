@@ -106,8 +106,8 @@ public class AutoCommandFactory {
                     new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 180, -0.3, 0,-2, 50)
                 ),
                 forward(3,180),
-                ArmPositionCommand.createCommand(armSubsystem,(ArmPosition.BARAUTO)).withTimeout(125),
-                new WaitCommand(500),
+                ArmPositionCommand.createCommand(armSubsystem,(ArmPosition.BARAUTO)).withTimeout(250),
+               // new WaitCommand(500),
                 new UnInstantCommand(()-> armSubsystem.stop())
 
         );
@@ -202,12 +202,13 @@ public class AutoCommandFactory {
                 forward(16, 0),
                 new WaitCommand(200),
                 new UnInstantCommand(() -> clawSubsystem.open()),
-                backUp(22, 0),
+                backUp(20, 0),
                 new ParallelCommandGroup(
                         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.DOWN, telemetry),
                         rFastMove(37, 0),
                         ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
-                )
+                ),
+                backUp(2,0)
         );
     }
 }
