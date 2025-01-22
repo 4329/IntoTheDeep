@@ -8,6 +8,7 @@ import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.hardware.dfrobot.HuskyLensSubsystem;
 
+import org.ejml.dense.row.linsol.qr.LinearSolverQrHouseTran_ZDRM;
 import org.firstinspires.ftc.robotcore.external.Predicate;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
@@ -131,23 +132,23 @@ public class AutoCommandFactory {
     }
 
     private Command backUp (double inches, double heading){
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0.35, 0, 0,inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0.7, 0, 0,inches);
     }
     private Command forward (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.35, 0, 0, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.7, 0, 0, inches);
     }
     private Command slowForward (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.2, 0, 0, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.4, 0, 0, inches);
     }
 
     private Command lMove (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.3, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.6, inches);
     }
     private Command lFastMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.7, inches);
     }
     private Command rMove (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .21, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, .42, inches);
     }
     private Command rFastMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .7, inches);

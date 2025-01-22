@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.commands.MecanumDriveCommand;
 import org.firstinspires.ftc.teamcode.commands.PickUpSample;
 import org.firstinspires.ftc.teamcode.commands.RaiseToHighBasket;
 import org.firstinspires.ftc.teamcode.commands.ScoreCommand;
+import org.firstinspires.ftc.teamcode.commands.TurnToHeadingCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
@@ -33,6 +34,7 @@ public class MatchTeleop extends CommandOpMode {
     private ElevatorSubsystem elevatorSubsystem;
     private MecanumDriveSubsystem mecanumDriveSubsystem;
     private TelemetryUpdateSubsystem telemetryUpdateSubsystem;
+    private ImuSubsystem imuSubsystem;
     private ClawSubsystem clawSubsystem;
     private ArmSubsystem armSubsystem;
     private Command totalZeroCommandGroup;
@@ -42,6 +44,7 @@ public class MatchTeleop extends CommandOpMode {
     public void initialize() {
         driver = new GamepadEx(gamepad1);
         operator = new GamepadEx(gamepad2);
+        imuSubsystem = new ImuSubsystem(hardwareMap, telemetry);
         mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap, telemetry);
         telemetryUpdateSubsystem = new TelemetryUpdateSubsystem(telemetry);
         elevatorSubsystem = new ElevatorSubsystem(hardwareMap, telemetry);
@@ -56,13 +59,17 @@ public class MatchTeleop extends CommandOpMode {
                 () -> driver.getButton(GamepadKeys.Button.A),
                 telemetry);
 
+        driver.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 90));
+        driver.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0));
+
+
         clawOpenerCommand = new ClawOpenerCommand(clawSubsystem);
         clawCloserCommand = new ClawCloserCommand(clawSubsystem);
 
-        driver.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),0, 1, telemetry));
+//        driver.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),0, 1, telemetry));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),1, 0, telemetry));
         driver.getGamepadButton(GamepadKeys.Button.DPAD_UP).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),-1, 0, telemetry));
-        driver.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),0, -1, telemetry));
+//        driver.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whileHeld(new MecanumDpadCommand(mecanumDriveSubsystem,() -> driver.getButton(GamepadKeys.Button.B),0, -1, telemetry));
         ElevatorVerticalCommand elevatorVerticalCommand = new ElevatorVerticalCommand(elevatorSubsystem, () -> operator.getLeftY(), telemetry);
         ArmVerticalCommand armVerticalCommand = new ArmVerticalCommand(armSubsystem, () -> operator.getRightY(), telemetry);
         operator.getGamepadButton(GamepadKeys.Button.X).whenHeld(clawCloserCommand);
