@@ -132,23 +132,23 @@ public class AutoCommandFactory {
     }
 
     private Command backUp (double inches, double heading){
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0.7, 0, 0,inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0.35, 0, 0,inches);
     }
     private Command forward (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.7, 0, 0, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.35, 0, 0, inches);
     }
     private Command slowForward (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.4, 0, 0, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, -0.2, 0, 0, inches);
     }
 
     private Command lMove (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.6, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.3, inches);
     }
     private Command lFastMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, -.7, inches);
     }
     private Command rMove (double inches, double heading) {
-        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0, 0, .42, inches);
+        return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .21, inches);
     }
     private Command rFastMove (double inches, double heading) {
         return new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, heading, 0 , 0, .7, inches);
@@ -216,19 +216,74 @@ public class AutoCommandFactory {
     public Command AdvancedBasketOne() {
 
         return new SequentialCommandGroup(
-                new UnInstantCommand(() -> clawSubsystem.close()),
-                new ParallelCommandGroup(
-                        new SequentialCommandGroup(
-                                new WaitCommand(2000),
-                                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT)),
-                        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry),
-                        rMove(7, 0)));
+            new UnInstantCommand(() -> clawSubsystem.close()),
+            new ParallelCommandGroup(
+                    new SequentialCommandGroup(
+                            new WaitCommand(600),
+                            ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT).withTimeout(1000)
+                    ),
+                    new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(1400),
+                    rMove(17, 0)),
+            new ParallelCommandGroup(
+                    new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(200),
+                    ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT).withTimeout(200),
+                    forward(4, 0)
+            ),
+            new WaitCommand(200),
+            new ScoreCommand(armSubsystem, clawSubsystem),
+            new WaitCommand(75),
+            new ParallelCommandGroup(
+                new SequentialCommandGroup(
+                        new WaitCommand(100),
+                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
+                ),
+                new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
+                backUp(14.25, 0)
+            ),
+            new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
+                forward(6, -90),
+                new UnInstantCommand(()-> clawSubsystem.close()),
+                new WaitCommand(500),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0).withTimeout(1000),
+                new UnInstantCommand(()-> clawSubsystem.close())
+
+        );
 
     }
 //
-//    public Command AdvancedBasketOne() {
+    public Command AdvancedBasketTwo() {
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                       ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
+                        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(2000),
+                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.8, 0, -0.55, 17)
+                ),
+                new WaitCommand(200),
+                new ScoreCommand(armSubsystem, clawSubsystem),
+                new WaitCommand(75),
+                new ParallelCommandGroup(
+                    new SequentialCommandGroup(
+                        new WaitCommand(100),
+                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
+                    ),
+                    new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
+                    backUp(9, 0)
+                ),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
+                forward(7, -90),
+                new UnInstantCommand(()-> clawSubsystem.close()),
+                new WaitCommand(500),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0).withTimeout(1000),
+                new UnInstantCommand(()-> clawSubsystem.close()),
+                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
+                new ParallelCommandGroup(
+                        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(2000),
+                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.5, 0, -0.55, 17.75)
+                ),
+                new ScoreCommand(armSubsystem, clawSubsystem)
+        );
 //
-//    }
+    }
 //
 
 }

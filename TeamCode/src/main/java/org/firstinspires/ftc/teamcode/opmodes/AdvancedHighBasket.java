@@ -15,9 +15,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TelemetryUpdateSubsystem;
 
-public class AdvancedHighBasket {
 @Autonomous(name = "AdvancedHighBasket", group = "1")
-public class HighBasketAuto extends CommandOpMode {
+public class AdvancedHighBasket extends CommandOpMode {
     private MecanumDriveSubsystem mecanumDriveSubsystem;
     private TelemetryUpdateSubsystem telemetryUpdateSubsystem;
     private ImuSubsystem imuSubsystem;
@@ -30,7 +29,7 @@ public class HighBasketAuto extends CommandOpMode {
     @Override
     public void initialize() {
 
-        telemetry.speak("some advanced stuff going on!");
+        telemetry.speak("three two one");
 
         mecanumDriveSubsystem = new MecanumDriveSubsystem(hardwareMap, telemetry);
         telemetryUpdateSubsystem = new TelemetryUpdateSubsystem(telemetry);
@@ -42,10 +41,9 @@ public class HighBasketAuto extends CommandOpMode {
         SequentialCommandGroup yes = new SequentialCommandGroup(
                 new InitializeNavxCommand(imuSubsystem, telemetry),
                 new UnInstantCommand(() -> armSubsystem.resetEncoder()),
-                factory.AdvancedBasketOne()
+                factory.AdvancedBasketOne(),
+                factory.AdvancedBasketTwo()
         );
         schedule(yes);
     }
-}
-
 }
