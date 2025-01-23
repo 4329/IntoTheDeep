@@ -212,5 +212,24 @@ public class AutoCommandFactory {
                 backUp(2,0)
         );
     }
+
+    public Command AdvancedBasketOne() {
+
+        return new SequentialCommandGroup(
+                new UnInstantCommand(() -> clawSubsystem.close()),
+                new ParallelCommandGroup(
+                        new SequentialCommandGroup(
+                                new WaitCommand(2000),
+                                ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT)),
+                        new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry),
+                        rMove(7, 0)));
+
+    }
+//
+//    public Command AdvancedBasketOne() {
+//
+//    }
+//
+
 }
 
