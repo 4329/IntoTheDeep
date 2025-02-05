@@ -238,7 +238,7 @@ public class AutoCommandFactory {
                         ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
                 ),
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
-                backUp(14.25, 0)
+                backUp(14.5, 0)
             ),
             new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
                 forward(6, -90),
@@ -256,7 +256,7 @@ public class AutoCommandFactory {
                 new ParallelCommandGroup(
                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(2000),
-                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.8, 0, -0.55, 17)
+                    new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.95, 0, -0.65, 17)
                 ),
                 new WaitCommand(200),
                 new ScoreCommand(armSubsystem, clawSubsystem),
@@ -267,10 +267,10 @@ public class AutoCommandFactory {
                         ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
                     ),
                     new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
-                    backUp(9, 0)
+                    backUp(10, 0)
                 ),
                 new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
-                forward(7, -90),
+                forward(8, -90),
                 new UnInstantCommand(()-> clawSubsystem.close()),
                 new WaitCommand(500),
                 new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 0).withTimeout(1000),
@@ -278,7 +278,7 @@ public class AutoCommandFactory {
                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                 new ParallelCommandGroup(
                         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(2000),
-                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.5, 0, -0.55, 17.75)
+                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.0, -0.55, -0.75)
                 ),
                 new ScoreCommand(armSubsystem, clawSubsystem)
         );
