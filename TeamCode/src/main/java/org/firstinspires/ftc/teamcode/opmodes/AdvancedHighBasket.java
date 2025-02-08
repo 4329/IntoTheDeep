@@ -43,7 +43,8 @@ public class AdvancedHighBasket extends CommandOpMode {
                 new UnInstantCommand(() -> armSubsystem.resetEncoder()),
                 factory.AdvancedBasketOne(),
                 factory.AdvancedBasketTwo(),
-                factory.lastSampleHighBasket()
+                factory.floorScore(),
+                factory.touchLowBarFloorScore()
         );
         schedule(yes);
     }

@@ -279,7 +279,7 @@ public class AutoCommandFactory {
                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                 new ParallelCommandGroup(
                         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(2000),
-                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.6, -0.0, -0.9, 19)
+                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.68, -0.0, -1, 20)
                 ),
 
                 new WaitCommand(200),
@@ -324,6 +324,31 @@ public class AutoCommandFactory {
                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
                   )
           )
+
+        );
+    }
+    public Command floorScore() {
+        return new SequentialCommandGroup(
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 45).withTimeout(750),
+                new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 45, 0.7, 0, 0, 28),
+                rFastMove (23, 45),
+                forward (30, 45),
+                lFastMove (5, 90),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, 135).withTimeout(750)
+
+        );
+    }
+    public Command touchLowBarFloorScore() {
+        return new SequentialCommandGroup(
+                new ParallelCommandGroup(
+                        ArmPositionCommand.createCommand(armSubsystem,ArmPosition.OUT).withTimeout(250),
+                        new UnInstantCommand(() ->clawSubsystem.close()),
+                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 135, -0.5, 0,-1, 62)
+                ),
+                forward(3,180),
+                ArmPositionCommand.createCommand(armSubsystem,(ArmPosition.BARAUTO)).withTimeout(250),
+                // new WaitCommand(500),
+                new UnInstantCommand(()-> armSubsystem.stop())
 
         );
     }
