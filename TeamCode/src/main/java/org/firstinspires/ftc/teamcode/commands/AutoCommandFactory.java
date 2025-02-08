@@ -235,13 +235,13 @@ public class AutoCommandFactory {
             new WaitCommand(75),
             new ParallelCommandGroup(
                 new SequentialCommandGroup(
-                        new WaitCommand(100),
+                        new WaitCommand(300),
                         ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
                 ),
                 new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
                 backUp(14.5, 0)
             ),
-            new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
+            new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90).withTimeout(1000),
                 forward(7, -90),
                 new UnInstantCommand(()-> clawSubsystem.close()),
                 new WaitCommand(500),
@@ -264,13 +264,13 @@ public class AutoCommandFactory {
                 new WaitCommand(75),
                 new ParallelCommandGroup(
                     new SequentialCommandGroup(
-                        new WaitCommand(100),
+                        new WaitCommand(300),
                         ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
                     ),
                     new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
-                    backUp(11, 0)
+                    backUp(12.5, 0)
                 ),
-                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90),
+                new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90).withTimeout(1000),
                 forward(9, -90),
                 new UnInstantCommand(()-> clawSubsystem.close()),
                 new WaitCommand(500),
@@ -279,7 +279,7 @@ public class AutoCommandFactory {
                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
                 new ParallelCommandGroup(
                         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(2000),
-                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.55, -0.0, -0.85, 17.75)
+                        new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -0.6, -0.0, -0.9, 19)
                 ),
 
                 new WaitCommand(200),
@@ -287,7 +287,7 @@ public class AutoCommandFactory {
                 new WaitCommand(75),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                new WaitCommand(100),
+                                new WaitCommand(300),
                                 ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
                         ),
                         new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry),
@@ -296,7 +296,36 @@ public class AutoCommandFactory {
         );
 //
     }
-//
 
+    public Command lastSampleHighBasket()  {
+        return new SequentialCommandGroup(
+          new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -90).withTimeout(750),
+          forward(9, -90),
+          forward(7, -45),
+          new TurnToHeadingCommand(mecanumDriveSubsystem, imuSubsystem, telemetry, -45),
+//          forward(2, -45),
+          new UnInstantCommand(()-> clawSubsystem.close()),
+          new WaitCommand(500),
+          backUp(5, -45),
+          new TurnToHeadingCommand (mecanumDriveSubsystem, imuSubsystem, telemetry, 0),
+          new ParallelCommandGroup(
+                  ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),
+                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.UPPERBASKET, telemetry).withTimeout(2000),
+                  new EncoderDriveCommand(mecanumDriveSubsystem, imuSubsystem, 0, -.85, 0, -0.85, 20)
+          ),
+          new WaitCommand(200),
+          new ScoreCommand(armSubsystem, clawSubsystem),
+          new WaitCommand(75),
+          new ParallelCommandGroup(
+                  new ElevatorPosCommand(elevatorSubsystem, ElevatorPosition.INTAKE, telemetry).withTimeout(2000),
+                  backUp(10, 0),
+                  new SequentialCommandGroup(
+                       new WaitCommand(300),
+                       ArmPositionCommand.createCommand(armSubsystem, ArmPosition.IN)
+                  )
+          )
+
+        );
+    }
 }
 

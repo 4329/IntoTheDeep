@@ -42,7 +42,8 @@ public class AdvancedHighBasket extends CommandOpMode {
                 new InitializeNavxCommand(imuSubsystem, telemetry),
                 new UnInstantCommand(() -> armSubsystem.resetEncoder()),
                 factory.AdvancedBasketOne(),
-                factory.AdvancedBasketTwo()
+                factory.AdvancedBasketTwo(),
+                factory.lastSampleHighBasket()
         );
         schedule(yes);
     }
