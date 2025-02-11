@@ -2,22 +2,16 @@ package org.firstinspires.ftc.teamcode.commands;
 
 import com.arcrobotics.ftclib.command.Command;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
-import com.arcrobotics.ftclib.command.ParallelRaceGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
-import com.qualcomm.hardware.dfrobot.HuskyLensSubsystem;
 
-import org.ejml.dense.row.linsol.qr.LinearSolverQrHouseTran_ZDRM;
-import org.firstinspires.ftc.robotcore.external.Predicate;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.TelemetryUpdateSubsystem;
-import org.firstinspires.ftc.teamcode.subsystems.WebcamSubsystem;
 import org.firstinspires.ftc.teamcode.util.ArmPosition;
 import org.firstinspires.ftc.teamcode.util.ElevatorPosition;
 
@@ -213,7 +207,7 @@ public class AutoCommandFactory {
         );
     }
 
-    public Command AdvancedBasketOne() {
+    public Command advancedBasketOne() {
 
         return new SequentialCommandGroup(
             new UnInstantCommand(() -> clawSubsystem.close()),
@@ -252,7 +246,7 @@ public class AutoCommandFactory {
 
     }
 //
-    public Command AdvancedBasketTwo() {
+    public Command advancedBasketTwo() {
         return new SequentialCommandGroup(
                 new ParallelCommandGroup(
                        ArmPositionCommand.createCommand(armSubsystem, ArmPosition.OUT),

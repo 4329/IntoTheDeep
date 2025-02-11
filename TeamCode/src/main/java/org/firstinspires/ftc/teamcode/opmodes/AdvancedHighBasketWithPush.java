@@ -15,8 +15,8 @@ import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TelemetryUpdateSubsystem;
 
-@Autonomous(name = "AdvancedHighBasket", group = "1")
-public class AdvancedHighBasket extends CommandOpMode {
+@Autonomous(name = "AdvancedHighBasketPushNPark", group = "1")
+public class AdvancedHighBasketWithPush extends CommandOpMode {
     private MecanumDriveSubsystem mecanumDriveSubsystem;
     private TelemetryUpdateSubsystem telemetryUpdateSubsystem;
     private ImuSubsystem imuSubsystem;
@@ -43,7 +43,8 @@ public class AdvancedHighBasket extends CommandOpMode {
                 new UnInstantCommand(() -> armSubsystem.resetEncoder()),
                 factory.advancedBasketOne(),
                 factory.advancedBasketTwo(),
-                factory.lastSampleHighBasket()
+                factory.floorScore(),
+                factory.touchLowBarFloorScore()
         );
         schedule(yes);
     }
