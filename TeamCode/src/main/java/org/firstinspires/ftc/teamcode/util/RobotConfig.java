@@ -12,4 +12,8 @@ public class RobotConfig {
     public static double ARM_I_MAX = 15;
 
     public static double CLAW_SPEED = .02;
+
+    public static int ICON_SIZE = 10;
+    public static int ORIGIN_X = 0;
+    public static int ORIGIN_Y = 0;
 }

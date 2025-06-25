@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ElevatorSubsystem;
 //import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.ImuSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.MecanumDriveSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.OTOSLocalizerSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.TelemetryUpdateSubsystem;
 import org.firstinspires.ftc.teamcode.util.ArmPosition;
 
@@ -35,6 +36,7 @@ public class MatchTeleop extends CommandOpMode {
     private ImuSubsystem imuSubsystem;
     private ClawSubsystem clawSubsystem;
     private ArmSubsystem armSubsystem;
+    private OTOSLocalizerSubsystem otosLocalizerSubsystem;
     private Command totalZeroCommandGroup;
     private Command driveMecanumCommand;
 
@@ -48,6 +50,7 @@ public class MatchTeleop extends CommandOpMode {
         elevatorSubsystem = new ElevatorSubsystem(hardwareMap, telemetry);
         clawSubsystem = new ClawSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, telemetry);
+        otosLocalizerSubsystem = new OTOSLocalizerSubsystem(hardwareMap);
         driveMecanumCommand = new MecanumDriveCommand(
             mecanumDriveSubsystem,
             () -> driver.getLeftY(),
@@ -85,6 +88,7 @@ public class MatchTeleop extends CommandOpMode {
         mecanumDriveSubsystem.setDefaultCommand(driveMecanumCommand);
         elevatorSubsystem.setDefaultCommand(elevatorVerticalCommand);
 //        register(imuSubsystem, telemetryUpdateSubsystem);
+        register(otosLocalizerSubsystem);
 
        //TODO uncomment when elevatorButton attached schedule(new ElevatorResetCommand(elevatorSubsystem, telemetry));
     }
