@@ -22,7 +22,7 @@ this.telemetry = telemetry;
 
     @Override
     public void execute() {
-        armSubsystem.move(armPower.getAsDouble());
+   //     armSubsystem.move(armPower.getAsDouble());
     }
 
 

@@ -124,12 +124,15 @@ public class OTOSLocalizerSubsystem extends SubsystemBase {
         otos.getPosVelAcc(currentPose, currentVelocity, currentAccel);
     }
 
+    private String getCurrentPoseString() {
+        return String.format("[%.5f, %.5f] - %.2f°", currentPose.x, currentPose.y, currentPose.h);
+    }
+
     @Override
     public void periodic() {
         update();
-        Log.i("POSE", currentPose.toString());
+        Log.i("POSE", getCurrentPoseString());
         updateFtcDashboard();
-
     }
 
     private void updateFtcDashboard() {
